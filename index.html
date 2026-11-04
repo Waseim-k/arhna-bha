@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffe6df">
+<meta name="description" content="مواقيت الصلاة لدهوك وأربيل والسليمانية — مطابقة لتطبيق بانگ">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="أرحنا بها">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Readex+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<title>أرحنا بها</title>
+<style>
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+<style>
+  /* Layout: single-screen app, blue identity, 3D controls, sticky header, hero countdown, bottom sheets */
+  :root{
+    --bg:#ffe6df; --bg2:#fff6f3; --fg:#4a4458; --muted:#8b7f96;
+    --accent:#e7869b; --accent-2:#f3b9c6; --accent-soft:#fff0f3; --accent-edge:#d46e86;
+    --line:#f0dce3; --edge:#d79aad; --good:#2f9e6f; --card:#ffffff; --hero-fg:#ffffff;
+    --chrome:rgba(255,240,236,.8); --sheet:#fdeef1;
+    --page-grad:linear-gradient(165deg,#ffe9db 0%,#ffe0e6 42%,#ece4f7 100%);
+    --page-grad-night:linear-gradient(170deg,#2a2440 0%,#1e2140 60%,#161228 100%);
+    --shadow:0 12px 30px rgba(180,120,140,.2);
+    --f-disp:"Tajawal","Readex Pro",system-ui,sans-serif;
+    --f-body:"Tajawal","Readex Pro",system-ui,sans-serif;
+    --f-num:"Readex Pro",ui-monospace,monospace;
+  }
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+    --bg:#161228; --bg2:#1d1836; --fg:#ece6f4; --muted:#9b8fb3;
+    --accent:#e79ab0; --accent-2:#6a4e60; --accent-soft:#2a2038; --accent-edge:#b9708a;
+    --line:#2d2544; --edge:#0d0a16; --good:#54c295; --card:#1d1836; --hero-fg:#fdeef2;
+    --chrome:rgba(22,18,40,.8); --sheet:#1a1430; --page-grad:var(--page-grad-night);
+    --shadow:0 12px 30px rgba(0,0,0,.5); color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#161228; --bg2:#1d1836; --fg:#ece6f4; --muted:#9b8fb3;
+    --accent:#e79ab0; --accent-2:#6a4e60; --accent-soft:#2a2038; --accent-edge:#b9708a;
+    --line:#2d2544; --edge:#0d0a16; --good:#54c295; --card:#1d1836; --hero-fg:#fdeef2;
+    --chrome:rgba(22,18,40,.8); --sheet:#1a1430; --page-grad:var(--page-grad-night);
+    --shadow:0 12px 30px rgba(0,0,0,.5); color-scheme:dark;
+  }
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--fg);font-family:var(--f-body);margin:0;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+  body.bg-dawn{background:var(--page-grad)}
+  body.bg-plain{background:var(--bg)}
+  body.bg-geo{background-color:var(--bg);background-repeat:repeat;background-size:58px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='58' height='58'%3E%3Cg fill='none' stroke='%23c98ba0' stroke-opacity='.5' stroke-width='1.2'%3E%3Cpath d='M29 5l6.5 17.5L53 29l-17.5 6.5L29 53l-6.5-17.5L5 29l17.5-6.5z'/%3E%3Cpath d='M29 14l4.5 10.5L44 29l-10.5 4.5L29 44l-4.5-10.5L14 29l10.5-4.5z'/%3E%3C/g%3E%3C/svg%3E")}
+  body.bg-mosque{background-color:var(--bg);background-repeat:no-repeat;background-position:bottom center;background-size:min(600px,122%) auto;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='170' viewBox='0 0 400 170'%3E%3Cg fill='%23d79fb0' fill-opacity='.55'%3E%3Crect x='40' y='80' width='320' height='90' rx='6'/%3E%3Cpath d='M200 30c-22 0-40 20-40 46h80c0-26-18-46-40-46z'/%3E%3Crect x='196' y='14' width='8' height='18'/%3E%3Crect x='70' y='52' width='15' height='118' rx='7'/%3E%3Crect x='315' y='52' width='15' height='118' rx='7'/%3E%3Ccircle cx='77' cy='46' r='9'/%3E%3Ccircle cx='322' cy='46' r='9'/%3E%3C/g%3E%3C/svg%3E")}
+  body.bg-stars{background-color:#15112b;background-repeat:repeat;background-size:240px 240px;background-image:radial-gradient(1.6px 1.6px at 18% 24%,rgba(255,255,255,.9) 99%,transparent),radial-gradient(1.4px 1.4px at 68% 16%,rgba(255,255,255,.75) 99%,transparent),radial-gradient(1.7px 1.7px at 44% 58%,rgba(255,255,255,.85) 99%,transparent),radial-gradient(1.3px 1.3px at 82% 62%,rgba(255,255,255,.7) 99%,transparent),radial-gradient(1.6px 1.6px at 55% 84%,rgba(255,255,255,.8) 99%,transparent),radial-gradient(1.4px 1.4px at 12% 80%,rgba(255,255,255,.7) 99%,transparent)}
+  body.bg-custom{background-size:cover;background-position:center;background-repeat:no-repeat}
+  #app{max-width:520px;margin:0 auto;display:flex;flex-direction:column;min-height:100%;
+    padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0}
+  .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--chrome);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;gap:10px;padding-block:14px 8px;border-radius:0 0 18px 18px}
+  .topbar .actions{display:flex;gap:8px}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--chrome);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:10}
+  /* ---- 3D controls ---- */
+  .btn3d{transition:transform .08s ease, box-shadow .08s ease}
+  .btn3d:active{transform:translateY(3px)}
+  .city-btn{display:flex;align-items:center;gap:8px;background:var(--card);color:var(--fg);border:1px solid var(--line);
+    border-radius:999px;padding:9px 16px;font-family:var(--f-disp);font-weight:600;font-size:1.05rem;cursor:pointer;
+    box-shadow:0 3px 0 var(--edge),0 5px 12px rgba(0,0,0,.08)}
+  .city-btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge),0 2px 6px rgba(0,0,0,.08)}
+  .city-btn .chev{font-size:.75rem;opacity:.6}
+  .icon-btn{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:var(--card);
+    border:1px solid var(--line);color:var(--fg);cursor:pointer;font-size:1.25rem;box-shadow:0 3px 0 var(--edge),0 5px 12px rgba(0,0,0,.08)}
+  .icon-btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge),0 2px 6px rgba(0,0,0,.08)}
+  .hero{background:linear-gradient(145deg,var(--accent),var(--accent-2));color:var(--hero-fg);border-radius:26px;
+    padding:22px 20px 24px;box-shadow:0 6px 0 var(--accent-edge),0 16px 34px rgba(30,64,160,.3);margin-top:6px;text-align:center;overflow:hidden}
+  .hero .label{font-size:1.02rem;font-weight:500;opacity:.92}
+  .hero .count{font-family:var(--f-num);font-variant-numeric:tabular-nums;font-size:clamp(1.9rem,11vw,3.1rem);font-weight:600;line-height:1.1;letter-spacing:0;margin:6px 0 2px;white-space:nowrap;max-width:100%;text-shadow:0 2px 6px rgba(0,0,0,.2)}
+  .hero .next{font-size:.95rem;opacity:.88;font-weight:500}
+  .dates{text-align:center;color:var(--muted);margin:16px 0 6px;line-height:1.7;font-size:.95rem}
+  .dates .hijri{font-family:var(--f-disp);font-weight:600;color:var(--fg)}
+  .dates .greg{font-variant-numeric:tabular-nums}
+  .list{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+  .row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;background:var(--card);
+    border:1px solid var(--line);border-radius:16px;padding:13px 16px;box-shadow:0 2px 0 var(--edge),0 4px 10px rgba(0,0,0,.05)}
+  .row.next{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 3px 0 var(--accent-edge),0 6px 14px rgba(37,99,235,.18)}
+  .row .nm{font-family:var(--f-disp);font-weight:600;font-size:1.08rem}
+  .row .sub{font-size:.72rem;color:var(--muted);margin-top:1px}
+  .row .tm{font-family:var(--f-num);font-variant-numeric:tabular-nums;font-size:1.35rem;font-weight:600;letter-spacing:.5px}
+  .bell{width:36px;height:36px;display:grid;place-items:center;border-radius:11px;border:1px solid var(--line);background:var(--bg2);
+    color:var(--muted);cursor:pointer;font-size:1rem;box-shadow:0 2px 0 var(--edge);transition:transform .08s}
+  .bell:active{transform:translateY(2px)}
+  .bell.on{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 2px 0 var(--accent-edge)}
+  .footnote{color:var(--muted);font-size:.78rem;text-align:center;margin:18px 0 22px;line-height:1.7}
+  /* sheets */
+  .scrim{position:fixed;inset:0;background:rgba(10,20,45,.55);z-index:20;opacity:0;transition:opacity .25s;pointer-events:none}
+  .scrim.show{opacity:1;pointer-events:auto}
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--sheet);border-radius:22px 22px 0 0;
+    transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1);max-height:90vh;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .sheet.show{transform:translateY(0)}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 10px;border-bottom:1px solid var(--line)}
+  .sheet-head h2{font-family:var(--f-disp);font-size:1.2rem;margin:0}
+  .sheet-body{overflow-y:auto;padding:8px 20px 24px;display:flex;flex-direction:column;gap:6px}
+  .grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:8px auto 2px}
+  .sec-title{font-family:var(--f-disp);font-weight:600;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:16px 0 4px}
+  .opt{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .opt:last-child{border-bottom:0}
+  .opt .t{font-size:.98rem}
+  .opt .d{font-size:.76rem;color:var(--muted);margin-top:2px}
+  .chip-row{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{padding:9px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer;
+    font-family:var(--f-disp);font-size:.92rem;box-shadow:0 3px 0 var(--edge);transition:transform .08s,box-shadow .08s}
+  .chip:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+  .chip.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 3px 0 var(--accent-edge)}
+  .stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 2px 0 var(--edge)}
+  .stepper button{width:40px;height:40px;background:var(--card);border:0;color:var(--fg);font-size:1.3rem;cursor:pointer}
+  .stepper button:active{background:var(--accent-soft)}
+  .stepper .val{min-width:62px;text-align:center;font-family:var(--f-num);font-variant-numeric:tabular-nums;font-size:1rem}
+  .switch{width:52px;height:30px;border-radius:999px;background:var(--line);position:relative;cursor:pointer;flex:none;transition:background .2s;border:0;box-shadow:inset 0 2px 4px rgba(0,0,0,.15)}
+  .switch::after{content:"";position:absolute;top:3px;inset-inline-end:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+  .switch.on{background:var(--accent)}
+  .switch.on::after{transform:translateX(-22px)}
+  [dir="ltr"] .switch.on::after{transform:translateX(22px)}
+  .prayer-cfg{display:flex;flex-direction:column;gap:10px}
+  .pc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:0 2px 0 var(--edge)}
+  .pc-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .pc-nm{font-family:var(--f-disp);font-weight:600}
+  .pc-body{margin-top:10px;display:flex;flex-direction:column;gap:10px}
+  .mini{font-size:.8rem;color:var(--muted)}
+  .filebtn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:11px;
+    border:1px solid var(--line);background:var(--accent-soft);color:var(--fg);cursor:pointer;font-size:.86rem;font-family:var(--f-disp);box-shadow:0 2px 0 var(--edge)}
+  .filebtn input[type=file]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0;z-index:3}
+  .filebtn span{pointer-events:none}
+  .sound-name{font-size:.8rem;color:var(--accent);word-break:break-all}
+  .btn-primary{width:100%;padding:15px;border-radius:14px;border:0;background:var(--accent);color:#fff;font-family:var(--f-disp);font-weight:600;font-size:1rem;cursor:pointer;margin-top:8px;box-shadow:0 5px 0 var(--accent-edge),0 10px 20px rgba(37,99,235,.28);transition:transform .08s,box-shadow .08s}
+  .btn-primary:active{transform:translateY(4px);box-shadow:0 1px 0 var(--accent-edge),0 3px 8px rgba(37,99,235,.28)}
+  .btn-ghost{width:100%;padding:13px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-family:var(--f-disp);font-size:.95rem;cursor:pointer;box-shadow:0 3px 0 var(--edge);transition:transform .08s,box-shadow .08s}
+  .btn-ghost:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edge)}
+  .close-x{background:transparent;border:0;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1}
+  .city-list{display:flex;flex-direction:column;gap:8px}
+  .city-opt{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-family:var(--f-disp);font-size:1.05rem;box-shadow:0 2px 0 var(--edge)}
+  .city-opt.active{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 3px 0 var(--accent-edge)}
+  .city-opt .mark{color:var(--accent);font-weight:700}
+  .voice{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);box-shadow:0 2px 0 var(--edge)}
+  .voice.active{border-color:var(--accent);background:var(--accent-soft)}
+  .voice .vn{flex:1;min-width:0;word-break:break-all;font-size:.9rem}
+  .voice .play,.voice .del{border:0;background:transparent;cursor:pointer;font-size:1.1rem;color:var(--muted)}
+  /* qibla compass */
+  .compass{position:relative;width:230px;height:230px;margin:10px auto 6px}
+  .q-ring{position:absolute;inset:0;border-radius:50%;border:4px solid var(--line);background:var(--card);box-shadow:var(--shadow),inset 0 0 30px rgba(37,99,235,.06)}
+  .q-n{position:absolute;top:10px;left:50%;transform:translateX(-50%);font-family:var(--f-disp);font-weight:700;color:var(--muted);font-size:.9rem}
+  .q-arrow{position:absolute;inset:0;transition:transform .15s ease;transform-origin:50% 50%}
+  .q-arrow::before{content:"";position:absolute;top:34px;left:50%;transform:translateX(-50%);width:5px;height:66px;background:linear-gradient(var(--accent),var(--accent-2));border-radius:3px}
+  .q-head{position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:2rem;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+  .q-deg{font-family:var(--f-disp);font-weight:700;font-size:1.3rem;text-align:center;margin-top:6px}
+  .adhan-overlay{position:fixed;inset:0;z-index:40;background:linear-gradient(160deg,var(--accent),var(--accent-2));color:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px}
+  .adhan-overlay.show{display:flex}
+  .adhan-overlay .big{font-family:var(--f-disp);font-size:2rem;font-weight:700}
+  .adhan-overlay .sm{opacity:.9}
+  .adhan-overlay button{margin-top:14px;padding:14px 30px;border-radius:999px;border:2px solid #fff;background:rgba(255,255,255,.15);color:#fff;font-family:var(--f-disp);font-size:1.1rem;cursor:pointer}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="topbar">
+    <button class="city-btn" id="cityBtn"><span class="chev">▾</span><span id="cityName">دهوك</span></button>
+    <div class="actions">
+      <button class="icon-btn" id="openQibla" aria-label="qibla">🧭</button>
+      <button class="icon-btn" id="openSettings" aria-label="settings">⚙</button>
+    </div>
+  </div>
+  <div class="hero">
+    <div class="label" id="heroLabel">الصلاة القادمة بعد</div>
+    <div class="count" id="count">00:00:00</div>
+    <div class="next" id="heroNext">—</div>
+  </div>
+  <div class="dates"><div class="hijri" id="hijri">—</div><div class="greg" id="greg">—</div></div>
+  <div class="list" id="list"></div>
+  <div class="footnote" id="foot"></div>
+</div>
+
+<div class="scrim" id="scrimCity"></div>
+<div class="sheet" id="sheetCity">
+  <div class="grab"></div>
+  <div class="sheet-head"><h2 data-i18n="choose_city">اختر المدينة</h2><button class="close-x" data-close="city">✕</button></div>
+  <div class="sheet-body">
+    <button class="btn-ghost" id="gpsBtn" data-i18n="gps">📍 تحديد تلقائي بالموقع</button>
+    <div class="mini" id="gpsMsg" style="text-align:center"></div>
+    <div class="city-list" id="cityList" style="margin-top:6px"></div>
+  </div>
+</div>
+
+<div class="scrim" id="scrimQ"></div>
+<div class="sheet" id="sheetQ">
+  <div class="grab"></div>
+  <div class="sheet-head"><h2 data-i18n="qibla">القبلة</h2><button class="close-x" data-close="q">✕</button></div>
+  <div class="sheet-body" style="align-items:center">
+    <div class="compass"><div class="q-ring"></div><div class="q-n" id="qN">N</div><div class="q-arrow" id="qArrow"><div class="q-head">🕋</div></div></div>
+    <div class="q-deg" id="qDeg">—</div>
+    <div class="mini" id="qTip" style="text-align:center;margin-top:4px"></div>
+  </div>
+</div>
+
+<div class="scrim" id="scrimSet"></div>
+<div class="sheet" id="sheetSet">
+  <div class="grab"></div>
+  <div class="sheet-head"><h2 data-i18n="settings">الإعدادات</h2><button class="close-x" data-close="set">✕</button></div>
+  <div class="sheet-body">
+    <div class="opt"><div><div class="t" data-i18n="language">اللغة</div></div><div class="chip-row" id="langChips"></div></div>
+    <div class="opt"><div><div class="t" data-i18n="theme">المظهر</div></div>
+      <div class="chip-row" id="themeChips">
+        <button class="chip" data-theme="auto" data-i18n="theme_auto">تلقائي</button>
+        <button class="chip" data-theme="light" data-i18n="theme_light">فاتح</button>
+        <button class="chip" data-theme="dark" data-i18n="theme_dark">داكن</button>
+      </div></div>
+    <div class="opt" style="flex-direction:column;align-items:stretch;gap:10px">
+      <div class="t" id="bgTitle">الخلفية</div>
+      <div class="chip-row" id="bgChips"></div>
+      <label class="filebtn" style="align-self:flex-start"><input type="file" id="bgFile" accept="image/*"><span id="bgCustomLbl">🖼️ صورة مخصّصة</span></label>
+    </div>
+    <div class="opt"><div><div class="t" data-i18n="notif">التنبيهات</div><div class="d" id="notifState"></div></div><button class="switch" id="notifSwitch"></button></div>
+    <div class="opt"><div><div class="t" data-i18n="pre">تنبيه قبل الأذان</div><div class="d" data-i18n="pre_desc">تذكير قبل دخول الوقت</div></div>
+      <div class="stepper"><button id="preMinus">−</button><div class="val"><span id="preVal">10</span></div><button id="prePlus">+</button></div></div>
+    <div class="opt"><div><div class="t" data-i18n="flipstop">إيقاف الأذان بقلب الجهاز</div><div class="d" data-i18n="flipstop_desc"></div></div><button class="switch" id="flipSwitch"></button></div>
+    <div class="opt"><div><div class="t" data-i18n="showscreen">إظهار شاشة الأذان</div><div class="d" data-i18n="showscreen_desc"></div></div><button class="switch" id="screenSwitch"></button></div>
+    <div class="opt"><div><div class="t" data-i18n="speakpre">تنبيه منطوق قبل الأذان</div><div class="d" data-i18n="speakpre_desc"></div></div><div style="display:flex;align-items:center;gap:8px"><button class="icon-btn btn3d" id="speakTest" style="width:38px;height:38px;font-size:.95rem">▶</button><button class="switch" id="speakSwitch"></button></div></div>
+    <div class="opt"><div><div class="t" data-i18n="defsound">صوت افتراضي للأذان</div><div class="d" id="defSoundName"></div></div>
+      <label class="filebtn"><input type="file" id="defSoundFile" accept="audio/*"><span data-i18n="choosefile">اختر ملف</span></label></div>
+    <div class="sec-title" data-i18n="perprayer">أذان كل صلاة</div>
+    <div class="prayer-cfg" id="prayerCfg"></div>
+    <div class="sec-title" data-i18n="dua">دعاء بعد الأذان</div>
+    <div class="opt"><div><div class="t" data-i18n="dua_desc"></div></div><button class="switch" id="duaSwitch"></button></div>
+    <div class="prayer-cfg" id="duaList"></div>
+    <label class="filebtn" style="align-self:flex-start;margin-top:6px"><input type="file" id="duaFile" accept="audio/*"><span data-i18n="dua_add">➕ إضافة صوت</span></label>
+    <div class="mini" data-i18n="dua_note" style="margin-top:4px"></div>
+    <div class="sec-title" data-i18n="fineadj">ضبط دقيق</div>
+    <div class="mini" data-i18n="fineadj_desc" style="margin-bottom:6px"></div>
+    <div class="prayer-cfg" id="offsetCfg"></div>
+    <button class="btn-primary" id="testAdhan" data-i18n="test">تجربة صوت الأذان</button>
+    <button class="btn-ghost" id="resetBtn" data-i18n="reset" style="margin-top:8px">إعادة الضبط</button>
+    <div class="mini" id="vnote" data-i18n="vnote" style="text-align:center;margin-top:14px;line-height:1.7"></div>
+  </div>
+</div>
+
+<div class="adhan-overlay" id="adhanOverlay">
+  <div class="sm" id="adhanCity">دهوك</div>
+  <div class="big" id="adhanTitle">—</div>
+  <div class="sm" id="adhanTime">05:00</div>
+  <button id="stopAdhan" data-i18n="stop">إيقاف ✕</button>
+</div>
+<div id="toast" style="position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:.9rem;z-index:50;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90vw;text-align:center"></div>
+
+<script>
+const TBL = {
+  duhok: [["05:45","07:19","12:25","15:03","17:19","18:40"],["05:27","06:58","12:30","15:30","17:54","19:16"],["04:53","06:22","12:25","15:47","18:21","19:44"],["04:04","05:38","12:16","15:54","18:47","20:12"],["03:24","05:07","12:12","15:59","19:12","20:38"],["03:07","04:57","12:17","16:05","19:33","21:00"],["03:22","05:09","12:22","16:10","19:31","20:58"],["03:54","05:31","12:20","16:03","19:05","20:30"],["04:24","05:54","12:12","15:41","18:21","19:45"],["04:49","06:17","12:02","15:10","17:39","19:02"],["05:14","06:46","12:01","14:45","17:04","18:25"],["05:38","07:12","12:11","14:43","16:57","18:17"]],
+  erbil: [["05:58","07:18","12:22","14:55","17:18","18:33"],["05:29","06:55","12:26","15:22","17:50","19:05"],["04:50","06:19","12:23","15:39","18:15","19:30"],["04:03","05:39","12:14","15:48","18:41","19:56"],["03:29","05:06","12:09","15:58","19:07","20:22"],["03:16","05:00","12:16","16:05","19:27","20:42"],["03:29","05:10","12:22","16:09","19:26","20:41"],["03:52","05:31","12:19","15:58","18:58","20:13"],["04:22","05:54","12:10","15:34","18:16","19:31"],["04:50","06:16","11:58","15:04","17:33","18:48"],["05:22","06:45","11:58","14:38","17:01","18:16"],["05:55","07:14","12:10","14:37","16:57","18:12"]],
+  sulaymaniyah: [["05:43","07:07","12:14","14:50","17:16","18:35"],["05:23","06:45","12:18","15:16","17:47","19:04"],["04:46","06:07","12:13","15:32","18:14","19:29"],["04:03","05:24","12:04","15:39","18:39","19:54"],["03:28","04:52","12:01","15:43","19:04","20:22"],["03:16","04:42","12:05","15:48","19:23","20:43"],["03:29","04:55","12:10","15:54","19:21","20:40"],["03:56","05:18","12:09","15:47","18:55","20:12"],["04:21","05:42","12:00","15:26","18:13","19:29"],["04:45","06:06","11:50","14:56","17:31","18:45"],["05:13","06:35","11:49","14:32","17:00","18:17"],["05:35","07:01","12:00","14:30","16:55","18:15"]]
+};
+const COORD={duhok:[36.867,42.983],erbil:[36.191,44.009],sulaymaniyah:[35.561,45.435]};
+const PKEYS=["fajr","sunrise","dhuhr","asr","maghrib","isha"];
+const MONTH_STARTS=[0,31,59,90,120,151,181,212,243,273,304,334];
+
+const L={
+ ar:{dir:"rtl",name:"عربي",settings:"الإعدادات",language:"اللغة",theme:"المظهر",theme_auto:"تلقائي",theme_light:"فاتح",theme_dark:"داكن",
+  notif:"التنبيهات",notif_on:"مفعّلة",notif_off:"غير مفعّلة",pre:"تنبيه قبل الأذان",pre_desc:"تذكير قبل دخول الوقت بدقائق",min:"د",
+  flipstop:"إيقاف الأذان بقلب الجهاز",flipstop_desc:"اقلب الهاتف على وجهه ليتوقف الأذان",
+  defsound:"صوت افتراضي للأذان",choosefile:"اختر ملف",builtin:"نغمة مدمجة",samedefault:"نفس الصوت الافتراضي",
+  perprayer:"أذان كل صلاة",customsound:"صوت خاص",fineadj:"ضبط دقيق (± دقائق)",fineadj_desc:"صحّح أي فرق بسيط عن مسجدك.",
+  dua:"دعاء بعد الأذان",dua_desc:"تشغيل دعاء الأذان بعد انتهائه",dua_add:"➕ إضافة صوت",dua_none:"لا أصوات مضافة.",dua_note:"أضف ملفات تلاوة الدعاء من جهازك ثم اختر الصوت.",delete:"حذف",
+  test:"تجربة صوت الأذان",reset:"إعادة الضبط الافتراضي",choose_city:"اختر المدينة",gps:"📍 تحديد تلقائي بالموقع",
+  gps_wait:"جارِ تحديد الموقع…",gps_no:"الموقع غير متاح — اختر يدوياً.",gps_ok:"تم اختيار {c} (الأقرب لموقعك).",gps_fail:"تعذّر تحديد الموقع — اختر يدوياً.",
+  qibla:"القبلة",qibla_from_n:"{d}° من الشمال",qibla_tip:"وجّه أعلى الجهاز نحو السهم 🕋",qibla_nocompass:"البوصلة غير متاحة — استعمل الزاوية الثابتة من الشمال.",qibla_rel:"الاتجاه تقريبي — حرّك الهاتف على شكل ∞ لمعايرة البوصلة.",
+  nextin:"الصلاة القادمة بعد",prayertime:"حان وقت صلاة {p}",soonbefore:"باقي {m} دقيقة على أذان {p}",stop:"إيقاف ✕",chosen:"تم اختيار الصوت: {n}",
+  foot:"الأوقات معايَرة لتطابق تطبيق بانگ لمدينتك.<br>التنبيه والأذان يعملان أثناء فتح التطبيق.",
+  vnote:"النسخة الأولى (ويب). للأذان في الخلفية والجهاز مقفل يلزم نسخة أندرويد أصلية لاحقاً.",
+  azan:n=>"أذان "+n,p:{fajr:"الفجر",sunrise:"الشروق",dhuhr:"الظهر",asr:"العصر",maghrib:"المغرب",isha:"العشاء"},
+  c:{duhok:"دهوك",erbil:"أربيل",sulaymaniyah:"السليمانية"},hijriLoc:"ar-SA-u-ca-islamic-umalqura"},
+ sor:{dir:"rtl",name:"سۆرانی",settings:"ڕێکخستنەکان",language:"زمان",theme:"ڕووکار",theme_auto:"خۆکار",theme_light:"ڕووناک",theme_dark:"تاریک",
+  notif:"ئاگادارکردنەوەکان",notif_on:"چالاک",notif_off:"ناچالاک",pre:"ئاگادارکردنەوە پێش بانگ",pre_desc:"بیرخستنەوە پێش کاتەکە بە چەند خولەک",min:"خ",
+  flipstop:"وەستانی بانگ بە هەڵگەڕانی مۆبایل",flipstop_desc:"مۆبایل بەسەرڕووی دابنێ بۆ وەستانی بانگ",
+  defsound:"دەنگی بنەڕەتی بۆ بانگ",choosefile:"فایل هەڵبژێرە",builtin:"دەنگی ناوخۆیی",samedefault:"هەمان دەنگی بنەڕەتی",
+  perprayer:"بانگی هەر نوێژێک",customsound:"دەنگی تایبەت",fineadj:"ڕێکخستنی وردی (± خولەک)",fineadj_desc:"جیاوازی بچووک لەگەڵ مزگەوتەکەت ڕاستبکەرەوە.",
+  dua:"دوعا دوای بانگ",dua_desc:"لێدانی دوعای بانگ دوای تەواوبوونی",dua_add:"➕ زیادکردنی دەنگ",dua_none:"هیچ دەنگێک زیاد نەکراوە.",dua_note:"فایلی تیلاوەتی دوعا زیاد بکە و دەنگێک هەڵبژێرە.",delete:"سڕینەوە",
+  test:"تاقیکردنەوەی دەنگی بانگ",reset:"گەڕانەوە بۆ بنەڕەت",choose_city:"شار هەڵبژێرە",gps:"📍 دیاریکردنی خۆکار بە شوێن",
+  gps_wait:"دیاریکردنی شوێن…",gps_no:"شوێن بەردەست نییە — بە دەستی هەڵبژێرە.",gps_ok:"{c} هەڵبژێردرا (نزیکترین بۆ شوێنت).",gps_fail:"شوێن نەدۆزرایەوە — بە دەستی هەڵبژێرە.",
+  qibla:"قیبلە",qibla_from_n:"{d}° لە باکوورەوە",qibla_tip:"سەرەوەی مۆبایل ئاراستەی تیرەکە بکە 🕋",qibla_nocompass:"قیبلەنما بەردەست نییە — گۆشە جێگیرەکە بەکاربهێنە.",qibla_rel:"ئاراستە نزیکەیە — مۆبایل بەشێوەی ∞ بجوڵێنە بۆ ڕێکخستن.",
+  nextin:"ماوە بۆ بانگی داهاتوو",prayertime:"کاتی نوێژی {p} هات",soonbefore:"{m} خولەک ماوە بۆ بانگی {p}",stop:"وەستاندن ✕",chosen:"دەنگ هەڵبژێردرا: {n}",
+  foot:"کاتەکان ڕێکخراون بۆ یەکسانی لەگەڵ ئەپی بانگ بۆ شارەکەت.<br>ئاگادارکردنەوە و بانگ کاردەکەن کاتێک ئەپ کراوەیە.",
+  vnote:"وەشانی یەکەم (وێب). بۆ بانگ لە پاشبنەما پێویستی بە وەشانی ئەندرۆیدی ڕەسەن هەیە دواتر.",
+  azan:n=>"بانگی "+n,p:{fajr:"بەیانی",sunrise:"خۆرهەڵات",dhuhr:"نیوەڕۆ",asr:"عەسر",maghrib:"مەغریب",isha:"عیشا"},
+  c:{duhok:"دهۆک",erbil:"هەولێر",sulaymaniyah:"سلێمانی"},hijriLoc:"ar-SA-u-ca-islamic-umalqura"},
+ kmr:{dir:"rtl",name:"بادینی",settings:"ڕێکخستن",language:"زمان",theme:"دیمەن",theme_auto:"خۆبەخۆ",theme_light:"ڕۆناك",theme_dark:"تاری",
+  notif:"ئاگەهداری",notif_on:"چالاک",notif_off:"ناچالاک",pre:"ئاگەهداری بەری بانگێ",pre_desc:"بیرئینان بەری دەمی ب چەند خولەکان",min:"خ",
+  flipstop:"راوەستاندنا بانگێ ب هەڵگەڕاندنا مۆبایلی",flipstop_desc:"مۆبایلی سەر ڕویێ وی دانە دا بانگ بوەستیت",
+  defsound:"دەنگێ بنەڕەتی بۆ بانگێ",choosefile:"فایلەکێ هەلبژێرە",builtin:"دەنگێ ناڤخۆیی",samedefault:"هەمان دەنگێ بنەڕەتی",
+  perprayer:"بانگا هەر نڤێژەكێ",customsound:"دەنگێ تایبەت",fineadj:"ڕێکخستنا هویر (± خولەک)",fineadj_desc:"جیاوازیا بچویک دگەل مزگەفتا تە ڕاست بکە.",
+  dua:"دوعا پشتی بانگێ",dua_desc:"لێدانا دوعایا بانگێ پشتی تەواوبوونێ",dua_add:"➕ زێدەکرنا دەنگی",dua_none:"چ دەنگ نەهاتینە زێدەکرن.",dua_note:"فایلێن تیلاوەتا دوعایێ زێدە بکە و دەنگەکێ هەلبژێرە.",delete:"ژێبرن",
+  test:"ئەزمونا دەنگێ بانگێ",reset:"زڤڕین بۆ بنەڕەتی",choose_city:"باژێری هەلبژێرە",gps:"📍 دیارکرنا خۆبەخۆ ب جهـ",
+  gps_wait:"دیارکرنا جهـی…",gps_no:"جهـ نە بەردەستە — ب دەستی هەلبژێرە.",gps_ok:"{c} هاتە هەلبژارتن (نێزیکترین بۆ جهـێ تە).",gps_fail:"جهـ نەهاتە دیتن — ب دەستی هەلبژێرە.",
+  qibla:"قیبلە",qibla_from_n:"{d}° ژ باکوورڤە",qibla_tip:"سەرێ مۆبایلی بەرەڤ تیرێ بکە 🕋",qibla_nocompass:"قیبلەنیشان نە بەردەستە — گۆشا جێگر بکاربینە.",qibla_rel:"ئاراستە نێزیکە — مۆبایلی ب ئاوایێ ∞ بلڤینە بۆ ڕاستکرن.",
+  nextin:"ما بۆ بانگا بهێت",prayertime:"دەمێ نڤێژا {p} هات",soonbefore:"{m} خولەک ما بۆ بانگا {p}",stop:"ڕاوەستاندن ✕",chosen:"دەنگ هاتە هەلبژارتن: {n}",
+  foot:"دەم هاتینە ڕێکخستن دا دگەل ئەپا بانگ بۆ باژێرێ تە یەکسان بن.<br>ئاگەهداری و بانگ کاردکەن دەمێ ئەپ ڤەکری بیت.",
+  vnote:"وەشانا ئێکێ (وێب). بۆ بانگێ د پشتبنەما پێدڤی ب وەشانا ئەندرۆیدا ڕەسەن هەیە پاشتر.",
+  azan:n=>"بانگا "+n,p:{fajr:"بەیانی",sunrise:"رۆژهەلات",dhuhr:"نیڤرۆ",asr:"عەسر",maghrib:"مەغریب",isha:"عیشا"},
+  c:{duhok:"دهۆک",erbil:"هەولێر",sulaymaniyah:"سلێمانی"},hijriLoc:"ar-SA-u-ca-islamic-umalqura"},
+ en:{dir:"ltr",name:"English",settings:"Settings",language:"Language",theme:"Theme",theme_auto:"Auto",theme_light:"Light",theme_dark:"Dark",
+  notif:"Notifications",notif_on:"On",notif_off:"Off",pre:"Pre-adhan alert",pre_desc:"Remind this many minutes before",min:"m",
+  flipstop:"Flip to stop adhan",flipstop_desc:"Turn the phone face-down to stop the adhan",
+  defsound:"Default adhan sound",choosefile:"Choose file",builtin:"Built-in tone",samedefault:"Same as default",
+  perprayer:"Adhan per prayer",customsound:"Custom sound",fineadj:"Fine adjust (± minutes)",fineadj_desc:"Correct any small difference from your mosque.",
+  dua:"Dua after adhan",dua_desc:"Play the post-adhan dua when it ends",dua_add:"➕ Add voice",dua_none:"No voices added.",dua_note:"Add dua recitation files from your device and pick one.",delete:"Delete",
+  test:"Test adhan sound",reset:"Reset to defaults",choose_city:"Choose city",gps:"📍 Auto-detect by location",
+  gps_wait:"Locating…",gps_no:"Location unavailable — choose manually.",gps_ok:"{c} selected (nearest to you).",gps_fail:"Couldn't get location — choose manually.",
+  qibla:"Qibla",qibla_from_n:"{d}° from North",qibla_tip:"Point the top of your phone to the arrow 🕋",qibla_nocompass:"Compass unavailable — use the fixed angle from North.",qibla_rel:"Direction is approximate — move the phone in a ∞ shape to calibrate.",
+  nextin:"Next prayer in",prayertime:"Time for {p} prayer",soonbefore:"{m} min to {p} adhan",stop:"Stop ✕",chosen:"Sound selected: {n}",
+  foot:"Times calibrated to match the Bang app for your city.<br>Alerts and adhan work while the app is open.",
+  vnote:"First version (web). Background adhan with the screen locked needs a native Android app later.",
+  azan:n=>n+" adhan",p:{fajr:"Fajr",sunrise:"Sunrise",dhuhr:"Dhuhr",asr:"Asr",maghrib:"Maghrib",isha:"Isha"},
+  c:{duhok:"Duhok",erbil:"Erbil",sulaymaniyah:"Sulaymaniyah"},hijriLoc:"en-u-ca-islamic-umalqura"},
+ tr:{dir:"ltr",name:"Türkçe",settings:"Ayarlar",language:"Dil",theme:"Tema",theme_auto:"Otomatik",theme_light:"Açık",theme_dark:"Koyu",
+  notif:"Bildirimler",notif_on:"Açık",notif_off:"Kapalı",pre:"Ezandan önce uyarı",pre_desc:"Vakitten şu kadar dakika önce hatırlat",min:"dk",
+  flipstop:"Ters çevirince ezan dursun",flipstop_desc:"Telefonu yüzüstü çevir, ezan dursun",
+  defsound:"Varsayılan ezan sesi",choosefile:"Dosya seç",builtin:"Yerleşik ton",samedefault:"Varsayılanla aynı",
+  perprayer:"Her vakit için ezan",customsound:"Özel ses",fineadj:"İnce ayar (± dakika)",fineadj_desc:"Camine göre küçük farkı düzelt.",
+  dua:"Ezan sonrası dua",dua_desc:"Ezan bitince duayı çal",dua_add:"➕ Ses ekle",dua_none:"Ses eklenmedi.",dua_note:"Cihazından dua tilavet dosyaları ekle ve birini seç.",delete:"Sil",
+  test:"Ezan sesini dene",reset:"Varsayılana sıfırla",choose_city:"Şehir seç",gps:"📍 Konumla otomatik seç",
+  gps_wait:"Konum alınıyor…",gps_no:"Konum yok — elle seç.",gps_ok:"{c} seçildi (sana en yakın).",gps_fail:"Konum alınamadı — elle seç.",
+  qibla:"Kıble",qibla_from_n:"Kuzeyden {d}°",qibla_tip:"Telefonun üstünü oka doğrult 🕋",qibla_nocompass:"Pusula yok — kuzeyden sabit açıyı kullan.",qibla_rel:"Yön yaklaşıktır — telefonu ∞ şeklinde hareket ettirip kalibre et.",
+  nextin:"Sonraki vakte kalan",prayertime:"{p} vakti girdi",soonbefore:"{p} ezanına {m} dk",stop:"Durdur ✕",chosen:"Ses seçildi: {n}",
+  foot:"Vakitler şehrin için Bang uygulamasıyla eşleşecek şekilde ayarlandı.<br>Uyarı ve ezan uygulama açıkken çalışır.",
+  vnote:"İlk sürüm (web). Ekran kilitliyken arka planda ezan için sonradan yerel Android uygulaması gerekir.",
+  azan:n=>n+" ezanı",p:{fajr:"İmsak",sunrise:"Güneş",dhuhr:"Öğle",asr:"İkindi",maghrib:"Akşam",isha:"Yatsı"},
+  c:{duhok:"Duhok",erbil:"Erbil",sulaymaniyah:"Süleymaniye"},hijriLoc:"tr-u-ca-islamic-umalqura"}
+};
+const EXTRA={
+ ar:{showscreen:"إظهار شاشة الأذان",showscreen_desc:"عرض شاشة كاملة وقت الأذان",speakpre:"تنبيه منطوق قبل الأذان",speakpre_desc:"نطق «اقتربت صلاة…» بدل النغمة",soon_spoken:"اقتربت صلاة {p}",notif_blocked:"التنبيهات محجوبة هنا — فعّلها من إعدادات المتصفح أو افتح في Chrome.",speechlang:"ar"},
+ sor:{showscreen:"پیشاندانی شاشەی بانگ",showscreen_desc:"شاشەی تەواو لە کاتی بانگ",speakpre:"ئاگادارکردنەوەی دەنگی پێش بانگ",speakpre_desc:"وتنی «نزیک بووەوە نوێژی…» لەبری دەنگ",soon_spoken:"نزیک بووەوە نوێژی {p}",notif_blocked:"ئاگادارکردنەوە لێرە بلۆک کراوە — لە وێبگەڕ چالاکی بکە یان لە Chrome بیکەرەوە.",speechlang:"ar"},
+ kmr:{showscreen:"پیشاندانا شاشا بانگێ",showscreen_desc:"شاشا تەمام د دەمێ بانگێ",speakpre:"ئاگەهداریا دەنگی بەری بانگێ",speakpre_desc:"گۆتنا «نێزیک بوو نڤێژا…» ل جهێ دەنگی",soon_spoken:"نێزیک بوو نڤێژا {p}",notif_blocked:"ئاگەهداری ل ڤێرێ هاتیە گرتن — ژ وێبگەڕی چالاک بکە یان د Chrome دا ڤەکە.",speechlang:"ar"},
+ en:{showscreen:"Show adhan screen",showscreen_desc:"Full-screen view at adhan time",speakpre:"Spoken pre-adhan alert",speakpre_desc:"Say “… prayer is near” instead of a tone",soon_spoken:"{p} prayer is near",notif_blocked:"Notifications are blocked here — enable them in your browser or open in Chrome.",speechlang:"en"},
+ tr:{showscreen:"Ezan ekranını göster",showscreen_desc:"Ezan vaktinde tam ekran",speakpre:"Sesli ezan öncesi uyarı",speakpre_desc:"Ton yerine “… vakti yaklaştı” desin",soon_spoken:"{p} vakti yaklaştı",notif_blocked:"Bildirimler burada engelli — tarayıcıda aç veya Chrome'da aç.",speechlang:"tr"}
+};
+Object.keys(EXTRA).forEach(lg=>{if(L[lg])Object.assign(L[lg],EXTRA[lg]);});
+function T(){return L[S.lang]||L.ar;}
+function t(k,vars){let s=T()[k];if(s==null)s=L.ar[k];if(typeof s!=="string")return "";if(vars)for(const key in vars)s=s.replace("{"+key+"}",vars[key]);return s;}
+function speak(txt,lang){try{if(!window.speechSynthesis)return;speechSynthesis.cancel();const lg=(lang||"ar").toLowerCase();const u=new SpeechSynthesisUtterance(txt);u.lang=lg;u.rate=.8;u.pitch=.75;const vs=speechSynthesis.getVoices()||[];const inLang=vs.filter(x=>x.lang&&x.lang.toLowerCase().indexOf(lg)===0);const maleRe=/male|man|rich|majed|tarik|tariq|maged|hamed|hoda|naayf|fahad|amir|karim|omar|zaki|husam|\bdeep\b|#?(2|3|4|5)\b/i;const femaleRe=/female|woman|hoda|laila|salma|zariyah|\bfiona\b/i;let v=inLang.find(x=>maleRe.test(x.name)&&!femaleRe.test(x.name))||inLang.find(x=>!femaleRe.test(x.name))||inLang[0];if(v)u.voice=v;speechSynthesis.speak(u);}catch(e){}}
+
+function toMin(s){const[h,m]=s.split(":").map(Number);return h*60+m;}
+function fmt(mins){mins=((Math.round(mins)%1440)+1440)%1440;const h=Math.floor(mins/60),m=mins%60;return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");}
+function doy(d){const s=new Date(d.getFullYear(),0,0);return Math.floor((d-s)/86400000)-1;}
+function anchorsFor(city,pi){const a=[];for(let m=0;m<12;m++)a.push({t:MONTH_STARTS[m]+14,v:toMin(TBL[city][m][pi])});return a;}
+function interp(points,day){const n=points.length,Y=365;const ts=points.map(p=>p.t),vs=points.map(p=>p.v);const idx=k=>((k%n)+n)%n;let i=0;const dref=day>=ts[0]?day:day+Y;for(let k=0;k<n;k++){const a=ts[k],b=k+1<n?ts[k+1]:ts[0]+Y;if(dref>=a&&dref<b){i=k;break;}if(k===n-1)i=n-1;}const p0=vs[idx(i-1)],p1=vs[idx(i)],p2=vs[idx(i+1)],p3=vs[idx(i+2)];let t0=ts[idx(i)],t1=ts[idx(i+1)];if(t1<=t0)t1+=Y;let dd=dref<t0?dref+Y:dref;let u=(dd-t0)/(t1-t0);u=Math.max(0,Math.min(1,u));const u2=u*u,u3=u2*u;return 0.5*(2*p1+(-p0+p2)*u+(2*p0-5*p1+4*p2-p3)*u2+(-p0+3*p1-3*p2+p3)*u3);}
+function timesFor(city,date){const day=doy(date);const o={};PKEYS.forEach((k,pi)=>{o[k]=interp(anchorsFor(city,pi),day)+(S.offsets[k]||0);});return o;}
+function qiblaBearing(city){const[la,lo]=COORD[city];const φ1=la*Math.PI/180,φ2=21.4225*Math.PI/180,Δλ=(39.8262-lo)*Math.PI/180;const y=Math.sin(Δλ)*Math.cos(φ2);const x=Math.cos(φ1)*Math.sin(φ2)-Math.sin(φ1)*Math.cos(φ2)*Math.cos(Δλ);return (Math.atan2(y,x)*180/Math.PI+360)%360;}
+
+const BGS=["dawn","geo","mosque","stars","plain"];
+const BGLABELS={
+ ar:{t:"الخلفية",dawn:"فجر",geo:"نقش",mosque:"مسجد",stars:"نجوم",plain:"سادة",custom:"🖼️ صورة مخصّصة"},
+ sor:{t:"پاشبنەما",dawn:"بەیانی",geo:"نەخش",mosque:"مزگەوت",stars:"ئەستێرە",plain:"ساده",custom:"🖼️ وێنەی تایبەت"},
+ kmr:{t:"پاشبنەما",dawn:"بەیانی",geo:"نەخش",mosque:"مزگەفت",stars:"ستێرک",plain:"ساده",custom:"🖼️ وێنەیا تایبەت"},
+ en:{t:"Background",dawn:"Dawn",geo:"Pattern",mosque:"Mosque",stars:"Stars",plain:"Plain",custom:"🖼️ Custom image"},
+ tr:{t:"Arka plan",dawn:"Şafak",geo:"Desen",mosque:"Cami",stars:"Yıldız",plain:"Düz",custom:"🖼️ Özel görsel"}
+};
+function bgl(k){return (BGLABELS[S.lang]||BGLABELS.ar)[k]||BGLABELS.ar[k];}
+const DEF={city:"duhok",lang:"ar",theme:"auto",bg:"dawn",pre:10,flipStop:false,showScreen:true,speakPre:false,duaOn:false,duaActive:null,duaVoices:[],
+  adhanOn:{fajr:true,dhuhr:true,asr:true,maghrib:true,isha:true},
+  offsets:{fajr:0,sunrise:0,dhuhr:0,asr:0,maghrib:0,isha:0}};
+let S=JSON.parse(JSON.stringify(DEF));
+function load(){try{const r=localStorage.getItem("bang_cfg");if(r)S=Object.assign(JSON.parse(JSON.stringify(DEF)),JSON.parse(r));}catch(e){}}
+function save(){try{localStorage.setItem("bang_cfg",JSON.stringify(S));}catch(e){}}
+load();
+let sndNames={};
+function loadSndNames(){try{sndNames=JSON.parse(localStorage.getItem("bang_sndnames")||"{}");}catch(e){sndNames={};}}
+function saveSndNames(){try{localStorage.setItem("bang_sndnames",JSON.stringify(sndNames));}catch(e){}}
+loadSndNames();
+
+let db=null;const memSnd={};
+function openDB(){return new Promise(res=>{try{const r=indexedDB.open("bang_snd",1);r.onupgradeneeded=e=>e.target.result.createObjectStore("snd");r.onsuccess=e=>{db=e.target.result;res();};r.onerror=()=>res();}catch(e){res();}});}
+function putSnd(k,b){return new Promise(res=>{if(!db)return res();try{const tx=db.transaction("snd","readwrite");tx.objectStore("snd").put(b,k);tx.oncomplete=()=>res();tx.onerror=()=>res();}catch(e){res();}});}
+function getSnd(k){return new Promise(res=>{if(!db)return res(null);try{const tx=db.transaction("snd","readonly");const rq=tx.objectStore("snd").get(k);rq.onsuccess=()=>res(rq.result||null);rq.onerror=()=>res(null);}catch(e){res(null);}});}
+
+let ac=null;
+function tone(){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();const now=ac.currentTime;const notes=[0,2,3,5,3,2,0];let tt=now;notes.forEach(semi=>{const o=ac.createOscillator(),g=ac.createGain();o.type="sine";o.frequency.value=330*Math.pow(2,semi/12);g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(.28,tt+.05);g.gain.linearRampToValueAtTime(0,tt+.55);o.connect(g).connect(ac.destination);o.start(tt);o.stop(tt+.6);tt+=.5;});}catch(e){}}
+let curAudio=null;
+async function playBlob(key){let blob=memSnd[key]||await getSnd(key);if(blob){try{stopAudio();curAudio=new Audio(URL.createObjectURL(blob));await curAudio.play();return curAudio;}catch(e){}}return null;}
+async function playAdhan(key,isAdhan){stopAudio();let blob=memSnd[key]||await getSnd(key);if(!blob)blob=memSnd["_default"]||await getSnd("_default");if(blob){try{curAudio=new Audio(URL.createObjectURL(blob));if(isAdhan)curAudio.onended=()=>{if(S.duaOn&&S.duaActive)playBlob(S.duaActive);};await curAudio.play();return;}catch(e){}}tone();if(isAdhan&&S.duaOn&&S.duaActive)setTimeout(()=>playBlob(S.duaActive),4000);}
+function stopAudio(){if(curAudio){try{curAudio.onended=null;curAudio.pause();}catch(e){}curAudio=null;}}
+
+let toastT=null;
+function toast(msg){const el=document.getElementById("toast");if(!el)return;el.textContent=msg;el.style.opacity="1";clearTimeout(toastT);toastT=setTimeout(()=>el.style.opacity="0",2400);}
+async function onFile(target,file){if(!file)return;memSnd[target]=file;await openDB();await putSnd(target,file);sndNames[target]=file.name;saveSndNames();toast(t("chosen",{n:file.name}));if($("#sheetSet").classList.contains("show"))buildSettings();}
+async function addDua(file){if(!file)return;const k="_dua"+Date.now();memSnd[k]=file;await openDB();await putSnd(k,file);S.duaVoices.push({k:k,name:file.name});if(!S.duaActive)S.duaActive=k;if(!S.duaOn)S.duaOn=true;save();toast(t("chosen",{n:file.name}));buildSettings();}
+
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+function hijriStr(d){try{return new Intl.DateTimeFormat(T().hijriLoc,{weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(d);}catch(e){return "";}}
+function gregStr(d){return d.getFullYear()+" / "+String(d.getMonth()+1).padStart(2,"0")+" / "+String(d.getDate()).padStart(2,"0");}
+
+function renderList(){
+  const now=new Date();const tm=timesFor(S.city,now);const list=$("#list");list.innerHTML="";
+  const nowMin=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+  let nextKey=null,best=Infinity;
+  PKEYS.forEach(k=>{if(k==="sunrise")return;let dm=tm[k]-nowMin;if(dm<0)dm+=1440;if(dm<best){best=dm;nextKey=k;}});
+  PKEYS.forEach(k=>{
+    const row=document.createElement("div");row.className="row"+(k===nextKey?" next":"");
+    const nm=T().p[k];const subTxt=(k==="sunrise")?nm:T().azan(nm);
+    const bell=(k==="sunrise")?"<span style='width:36px'></span>":`<button class="bell ${S.adhanOn[k]?'on':''}" data-bell="${k}">${S.adhanOn[k]?'🔔':'🔕'}</button>`;
+    row.innerHTML=`${bell}<div><div class="nm">${nm}</div><div class="sub">${subTxt}</div></div><div class="tm">${fmt(tm[k])}</div>`;
+    list.appendChild(row);
+  });
+  $$("[data-bell]").forEach(b=>b.onclick=()=>{S.adhanOn[b.dataset.bell]=!S.adhanOn[b.dataset.bell];save();renderList();});
+  $("#hijri").textContent=hijriStr(now);$("#greg").textContent=gregStr(now);
+  $("#cityName").textContent=T().c[S.city];$("#adhanCity").textContent=T().c[S.city];$("#heroLabel").textContent=t("nextin");
+}
+let lastFired={};
+function tick(){
+  const now=new Date();const tm=timesFor(S.city,now);const nowSec=now.getHours()*3600+now.getMinutes()*60+now.getSeconds();
+  let nextKey=null,nextSec=Infinity;
+  PKEYS.forEach(k=>{if(k==="sunrise")return;let ps=Math.round(tm[k])*60;let dm=ps-nowSec;if(dm<0)dm+=86400;if(dm<nextSec){nextSec=dm;nextKey=k;}});
+  if(nextKey){const h=Math.floor(nextSec/3600),m=Math.floor(nextSec%3600/60),s=nextSec%60;$("#count").textContent=[h,m,s].map(x=>String(x).padStart(2,"0")).join(":");$("#heroNext").textContent=T().azan(T().p[nextKey]);}
+  const today=now.toDateString();
+  PKEYS.forEach(k=>{if(k==="sunrise"||!S.adhanOn[k])return;const pm=Math.round(tm[k]);const curM=now.getHours()*60+now.getMinutes();
+    const kA=today+k+"a";if(curM===pm&&now.getSeconds()<2&&!lastFired[kA]){lastFired[kA]=1;fireAdhan(k);}
+    if(S.pre>0){const pre=((pm-S.pre)%1440+1440)%1440;const kP=today+k+"p";if(curM===pre&&now.getSeconds()<2&&!lastFired[kP]){lastFired[kP]=1;firePre(k);}}});
+}
+function notify(title,body){try{if("Notification"in window&&Notification.permission==="granted")new Notification(title,{body});}catch(e){}}
+function notifDone(res){buildSettings();if(res!=="granted")toast(t("notif_blocked"));}
+function fireAdhan(k){const nm=T().p[k];notify(t("prayertime",{p:nm}),T().c[S.city]);if(S.showScreen){$("#adhanTitle").textContent=t("prayertime",{p:nm});$("#adhanTime").textContent=fmt(timesFor(S.city,new Date())[k]);$("#adhanOverlay").classList.add("show");}if(S.flipStop)startFlip();playAdhan(k,true);renderList();}
+function firePre(k){notify(t("soonbefore",{m:S.pre,p:T().p[k]}),T().c[S.city]);if(S.speakPre)speak(t("soon_spoken",{p:T().p[k]}),t("speechlang"));else tone();}
+
+/* flip-to-stop */
+let motionOn=false;
+function onMotion(e){const a=e.accelerationIncludingGravity;if(!a||a.z==null)return;if(a.z<-7){stopAudio();$("#adhanOverlay").classList.remove("show");stopFlip();}}
+function startFlip(){if(motionOn)return;try{window.addEventListener("devicemotion",onMotion);motionOn=true;}catch(e){}}
+function stopFlip(){if(motionOn){window.removeEventListener("devicemotion",onMotion);motionOn=false;}}
+function askMotion(){try{if(window.DeviceMotionEvent&&DeviceMotionEvent.requestPermission)DeviceMotionEvent.requestPermission().catch(()=>{});}catch(e){}}
+
+/* sheets */
+function openSheet(w){if(w==="city"){buildCityList();show("City");}else if(w==="q"){openQibla();}else{buildSettings();show("Set");}}
+function show(x){$("#scrim"+x).classList.add("show");$("#sheet"+x).classList.add("show");}
+function hide(x){$("#scrim"+x).classList.remove("show");$("#sheet"+x).classList.remove("show");}
+$("#cityBtn").onclick=()=>openSheet("city");
+$("#openSettings").onclick=()=>openSheet("set");
+$("#openQibla").onclick=()=>openSheet("q");
+$("#scrimCity").onclick=()=>hide("City");
+$("#scrimSet").onclick=()=>hide("Set");
+$("#scrimQ").onclick=()=>closeQibla();
+$$("[data-close]").forEach(b=>b.onclick=()=>{const w=b.dataset.close;if(w==="q")closeQibla();else hide(w==="city"?"City":"Set");});
+
+function buildCityList(){const el=$("#cityList");el.innerHTML="";Object.keys(COORD).forEach(k=>{const d=document.createElement("button");d.className="city-opt btn3d"+(k===S.city?" active":"");d.innerHTML=`<span>${T().c[k]}</span>${k===S.city?'<span class="mark">✓</span>':''}`;d.onclick=()=>{S.city=k;save();renderList();tick();hide("City");};el.appendChild(d);});}
+$("#gpsBtn").onclick=()=>{const msg=$("#gpsMsg");msg.textContent=t("gps_wait");if(!navigator.geolocation){msg.textContent=t("gps_no");return;}navigator.geolocation.getCurrentPosition(pos=>{const{latitude:la,longitude:lo}=pos.coords;let best=null,bd=Infinity;Object.entries(COORD).forEach(([k,c])=>{const dd=(c[0]-la)**2+(c[1]-lo)**2;if(dd<bd){bd=dd;best=k;}});S.city=best;save();renderList();tick();msg.textContent=t("gps_ok",{c:T().c[best]});buildCityList();},()=>{msg.textContent=t("gps_fail");},{timeout:8000});};
+
+/* qibla */
+let qHeading=null,qOn=false,qAbs=false;
+function updateQArrow(){const b=qiblaBearing(S.city);$("#qDeg").textContent=t("qibla_from_n",{d:Math.round(b)});if(qHeading==null){$("#qArrow").style.transform="rotate("+b+"deg)";$("#qTip").textContent=t("qibla_nocompass");}else{$("#qArrow").style.transform="rotate("+(b-qHeading)+"deg)";$("#qTip").textContent=t(qAbs?"qibla_tip":"qibla_rel");}}
+function orient(e){let h=null;if(typeof e.webkitCompassHeading==="number")h=e.webkitCompassHeading;else if(typeof e.alpha==="number")h=(360-e.alpha)%360;if(h==null)return;qAbs=qAbs||!!e.absolute;qHeading=h;updateQArrow();}
+async function openQibla(){show("Q");qHeading=null;qAbs=false;updateQArrow();try{if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission){const p=await DeviceOrientationEvent.requestPermission();if(p!=="granted")return;}window.addEventListener("deviceorientationabsolute",orient,true);window.addEventListener("deviceorientation",orient,true);qOn=true;}catch(e){}}
+function closeQibla(){hide("Q");if(qOn){window.removeEventListener("deviceorientationabsolute",orient,true);window.removeEventListener("deviceorientation",orient,true);qOn=false;}qHeading=null;}
+
+function applyI18n(){document.documentElement.setAttribute("dir",T().dir);document.body.setAttribute("dir",T().dir);$$("[data-i18n]").forEach(el=>{const v=t(el.dataset.i18n);if(v)el.textContent=v;});$("#foot").innerHTML=t("foot");}
+
+function buildSettings(){
+  const lc=$("#langChips");lc.innerHTML="";Object.keys(L).forEach(code=>{const b=document.createElement("button");b.className="chip btn3d"+(code===S.lang?" active":"");b.textContent=L[code].name;b.onclick=()=>{S.lang=code;save();applyI18n();renderList();tick();buildSettings();};lc.appendChild(b);});
+  $$("#themeChips .chip").forEach(c=>{c.classList.toggle("active",c.dataset.theme===S.theme);c.onclick=()=>{S.theme=c.dataset.theme;applyTheme();save();buildSettings();};});
+  buildBgChips();
+  const granted=window.Notification&&Notification.permission==="granted";
+  $("#notifState").textContent=granted?t("notif_on"):t("notif_off");$("#notifSwitch").classList.toggle("on",granted);
+  $("#notifSwitch").onclick=()=>{
+    if(!("Notification"in window)){toast(t("notif_blocked"));return;}
+    try{const r=Notification.requestPermission(res=>notifDone(res));if(r&&r.then)r.then(notifDone);}catch(e){toast(t("notif_blocked"));}
+  };
+  $("#screenSwitch").classList.toggle("on",S.showScreen);
+  $("#screenSwitch").onclick=()=>{S.showScreen=!S.showScreen;$("#screenSwitch").classList.toggle("on",S.showScreen);save();};
+  $("#speakSwitch").classList.toggle("on",S.speakPre);
+  $("#speakSwitch").onclick=()=>{S.speakPre=!S.speakPre;if(S.speakPre){try{speechSynthesis&&speechSynthesis.getVoices();}catch(e){}}$("#speakSwitch").classList.toggle("on",S.speakPre);save();};
+  $("#speakTest").onclick=()=>{const now=new Date();const tm=timesFor(S.city,now);const nm=now.getHours()*60+now.getMinutes();let nk="dhuhr",best=Infinity;PKEYS.forEach(k=>{if(k==="sunrise")return;let d=tm[k]-nm;if(d<0)d+=1440;if(d<best){best=d;nk=k;}});speak(t("soon_spoken",{p:T().p[nk]}),t("speechlang"));};
+  $("#preVal").textContent=S.pre+" "+t("min");
+  $("#preMinus").onclick=()=>{S.pre=Math.max(0,S.pre-1);$("#preVal").textContent=S.pre+" "+t("min");save();};
+  $("#prePlus").onclick=()=>{S.pre=Math.min(60,S.pre+1);$("#preVal").textContent=S.pre+" "+t("min");save();};
+  $("#flipSwitch").classList.toggle("on",S.flipStop);
+  $("#flipSwitch").onclick=()=>{S.flipStop=!S.flipStop;if(S.flipStop)askMotion();$("#flipSwitch").classList.toggle("on",S.flipStop);save();};
+  $("#defSoundName").textContent=sndNames["_default"]||t("builtin");
+  $("#defSoundFile").onchange=e=>onFile("_default",e.target.files[0]);
+  const pc=$("#prayerCfg");pc.innerHTML="";
+  PKEYS.filter(k=>k!=="sunrise").forEach(k=>{const card=document.createElement("div");card.className="pc";
+    card.innerHTML=`<div class="pc-top"><div class="pc-nm">${T().p[k]}</div><button class="switch ${S.adhanOn[k]?'on':''}" data-sw="${k}"></button></div>
+      <div class="pc-body"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span class="sound-name">${sndNames[k]||t("samedefault")}</span>
+      <label class="filebtn"><input type="file" accept="audio/*" data-snd="${k}"><span>🎵 ${t("customsound")}</span></label></div></div>`;
+    pc.appendChild(card);});
+  pc.querySelectorAll("[data-sw]").forEach(b=>b.onclick=()=>{S.adhanOn[b.dataset.sw]=!S.adhanOn[b.dataset.sw];b.classList.toggle("on");save();renderList();});
+  pc.querySelectorAll("[data-snd]").forEach(inp=>inp.onchange=e=>onFile(inp.dataset.snd,e.target.files[0]));
+  // dua
+  $("#duaSwitch").classList.toggle("on",S.duaOn);
+  $("#duaSwitch").onclick=()=>{S.duaOn=!S.duaOn;$("#duaSwitch").classList.toggle("on",S.duaOn);save();};
+  const dl=$("#duaList");dl.innerHTML="";
+  if(!S.duaVoices.length){const d=document.createElement("div");d.className="mini";d.textContent=t("dua_none");dl.appendChild(d);}
+  S.duaVoices.forEach(v=>{const row=document.createElement("div");row.className="voice"+(v.k===S.duaActive?" active":"");
+    row.innerHTML=`<button class="play" title="play">▶</button><span class="vn">${v.name}</span><button class="del" title="del">🗑</button>`;
+    row.querySelector(".vn").onclick=()=>{S.duaActive=v.k;save();buildSettings();};
+    row.querySelector(".play").onclick=()=>playBlob(v.k);
+    row.querySelector(".del").onclick=()=>{S.duaVoices=S.duaVoices.filter(x=>x.k!==v.k);if(S.duaActive===v.k)S.duaActive=S.duaVoices[0]?S.duaVoices[0].k:null;save();buildSettings();};
+    dl.appendChild(row);});
+  $("#duaFile").onchange=e=>addDua(e.target.files[0]);
+  const oc=$("#offsetCfg");oc.innerHTML="";
+  PKEYS.forEach(k=>{const card=document.createElement("div");card.className="pc";
+    card.innerHTML=`<div class="pc-top"><div class="pc-nm">${T().p[k]}</div><div class="stepper"><button data-om="${k}">−</button><div class="val"><span id="off-${k}">${S.offsets[k]>0?'+':''}${S.offsets[k]}</span></div><button data-op="${k}">+</button></div></div>`;
+    oc.appendChild(card);});
+  oc.querySelectorAll("[data-om]").forEach(b=>b.onclick=()=>{const k=b.dataset.om;S.offsets[k]=Math.max(-20,S.offsets[k]-1);$("#off-"+k).textContent=(S.offsets[k]>0?'+':'')+S.offsets[k];save();renderList();tick();});
+  oc.querySelectorAll("[data-op]").forEach(b=>b.onclick=()=>{const k=b.dataset.op;S.offsets[k]=Math.min(20,S.offsets[k]+1);$("#off-"+k).textContent=(S.offsets[k]>0?'+':'')+S.offsets[k];save();renderList();tick();});
+}
+let testBusy=false;
+function setTestLabel(){const b=$("#testAdhan");if(!b)return;b.textContent=testBusy?("■ "+t("stop")):t("test");}
+$("#testAdhan").onclick=async()=>{if(testBusy){stopAudio();testBusy=false;setTestLabel();return;}testBusy=true;setTestLabel();await playAdhan("_default",false);if(curAudio){curAudio.addEventListener("ended",()=>{testBusy=false;setTestLabel();});}else{testBusy=false;setTestLabel();}};
+$("#resetBtn").onclick=()=>{const lang=S.lang;S=JSON.parse(JSON.stringify(DEF));S.lang=lang;save();applyTheme();applyBg();applyI18n();renderList();tick();buildSettings();};
+$("#stopAdhan").onclick=()=>{stopAudio();$("#adhanOverlay").classList.remove("show");stopFlip();};
+function applyTheme(){const r=document.documentElement;if(S.theme==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",S.theme);}
+function applyBg(){const b=document.body;b.style.background="";["bg-dawn","bg-plain","bg-geo","bg-mosque","bg-stars","bg-custom"].forEach(c=>b.classList.remove(c));const id=S.bg||"dawn";
+  if(id==="custom"){getSnd("_bgimg").then(bl=>{if(bl){b.classList.add("bg-custom");b.style.background="center/cover no-repeat url("+URL.createObjectURL(bl)+")";}else{b.classList.add("bg-dawn");}});return;}
+  b.classList.add("bg-"+id);}
+async function setCustomBg(file){if(!file)return;await openDB();await putSnd("_bgimg",file);S.bg="custom";save();applyBg();toast(t("chosen",{n:file.name}));buildSettings();}
+function buildBgChips(){const el=$("#bgChips");if(!el)return;el.innerHTML="";$("#bgTitle").textContent=bgl("t");$("#bgCustomLbl").textContent=bgl("custom");
+  BGS.forEach(id=>{const b=document.createElement("button");b.className="chip btn3d"+((S.bg===id)?" active":"");b.textContent=bgl(id);b.onclick=()=>{S.bg=id;save();applyBg();buildBgChips();};el.appendChild(b);});
+  const inp=$("#bgFile");if(inp)inp.onchange=e=>setCustomBg(e.target.files[0]);}
+
+applyTheme();applyBg();applyI18n();renderList();openDB().then(()=>{if(S.bg==="custom")applyBg();});
+tick();setInterval(tick,1000);setInterval(renderList,30000);
+</script>
+<script>
+  if("serviceWorker" in navigator){
+    window.addEventListener("load",function(){
+      navigator.serviceWorker.register("service-worker.js").catch(function(){});
+    });
+  }
+</script>
+</body>
+</html>
