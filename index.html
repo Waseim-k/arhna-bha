@@ -345,11 +345,11 @@ const L={
   c:{duhok:"Duhok",erbil:"Erbil",sulaymaniyah:"Süleymaniye"},hijriLoc:"tr-u-ca-islamic-umalqura"}
 };
 const EXTRA={
- ar:{showscreen:"إظهار شاشة الأذان",showscreen_desc:"عرض شاشة كاملة وقت الأذان",speakpre:"تنبيه منطوق قبل الأذان",speakpre_desc:"نطق «اقتربت صلاة…» بدل النغمة",soon_spoken:"اقتربت صلاة {p}",notif_blocked:"التنبيهات محجوبة هنا — فعّلها من إعدادات المتصفح أو افتح في Chrome.",speechlang:"ar"},
- sor:{showscreen:"پیشاندانی شاشەی بانگ",showscreen_desc:"شاشەی تەواو لە کاتی بانگ",speakpre:"ئاگادارکردنەوەی دەنگی پێش بانگ",speakpre_desc:"وتنی «نزیک بووەوە نوێژی…» لەبری دەنگ",soon_spoken:"نزیک بووەوە نوێژی {p}",notif_blocked:"ئاگادارکردنەوە لێرە بلۆک کراوە — لە وێبگەڕ چالاکی بکە یان لە Chrome بیکەرەوە.",speechlang:"ar"},
- kmr:{showscreen:"پیشاندانا شاشا بانگێ",showscreen_desc:"شاشا تەمام د دەمێ بانگێ",speakpre:"ئاگەهداریا دەنگی بەری بانگێ",speakpre_desc:"گۆتنا «نێزیک بوو نڤێژا…» ل جهێ دەنگی",soon_spoken:"نێزیک بوو نڤێژا {p}",notif_blocked:"ئاگەهداری ل ڤێرێ هاتیە گرتن — ژ وێبگەڕی چالاک بکە یان د Chrome دا ڤەکە.",speechlang:"ar"},
- en:{showscreen:"Show adhan screen",showscreen_desc:"Full-screen view at adhan time",speakpre:"Spoken pre-adhan alert",speakpre_desc:"Say “… prayer is near” instead of a tone",soon_spoken:"{p} prayer is near",notif_blocked:"Notifications are blocked here — enable them in your browser or open in Chrome.",speechlang:"en"},
- tr:{showscreen:"Ezan ekranını göster",showscreen_desc:"Ezan vaktinde tam ekran",speakpre:"Sesli ezan öncesi uyarı",speakpre_desc:"Ton yerine “… vakti yaklaştı” desin",soon_spoken:"{p} vakti yaklaştı",notif_blocked:"Bildirimler burada engelli — tarayıcıda aç veya Chrome'da aç.",speechlang:"tr"}
+ ar:{showscreen:"إظهار شاشة الأذان",showscreen_desc:"عرض شاشة كاملة وقت الأذان",speakpre:"تنبيه منطوق قبل الأذان",speakpre_desc:"نطق «اقتربت صلاة…» بدل النغمة",soon_spoken:"اقتربت صلاة {p}",notif_blocked:"التنبيهات محجوبة هنا — فعّلها من إعدادات المتصفح أو افتح في Chrome.",notif_app:"تنبيهات الخلفية قيد الإعداد وستصل في تحديث قادم.",speechlang:"ar"},
+ sor:{showscreen:"پیشاندانی شاشەی بانگ",showscreen_desc:"شاشەی تەواو لە کاتی بانگ",speakpre:"ئاگادارکردنەوەی دەنگی پێش بانگ",speakpre_desc:"وتنی «نزیک بووەوە نوێژی…» لەبری دەنگ",soon_spoken:"نزیک بووەوە نوێژی {p}",notif_blocked:"ئاگادارکردنەوە لێرە بلۆک کراوە — لە وێبگەڕ چالاکی بکە یان لە Chrome بیکەرەوە.",notif_app:"ئاگادارکردنەوەی پاشبنەما لە ئامادەکاریدایە و لە نوێکردنەوەیەکی داهاتوودا دێت.",speechlang:"ar"},
+ kmr:{showscreen:"پیشاندانا شاشا بانگێ",showscreen_desc:"شاشا تەمام د دەمێ بانگێ",speakpre:"ئاگەهداریا دەنگی بەری بانگێ",speakpre_desc:"گۆتنا «نێزیک بوو نڤێژا…» ل جهێ دەنگی",soon_spoken:"نێزیک بوو نڤێژا {p}",notif_blocked:"ئاگەهداری ل ڤێرێ هاتیە گرتن — ژ وێبگەڕی چالاک بکە یان د Chrome دا ڤەکە.",notif_app:"ئاگەهداریێن پاشبنەمایی د ئامادەکرنێ دانە و دێ ل نویکرنەکا بهێن.",speechlang:"ar"},
+ en:{showscreen:"Show adhan screen",showscreen_desc:"Full-screen view at adhan time",speakpre:"Spoken pre-adhan alert",speakpre_desc:"Say “… prayer is near” instead of a tone",soon_spoken:"{p} prayer is near",notif_blocked:"Notifications are blocked here — enable them in your browser or open in Chrome.",notif_app:"Background notifications are coming in a future update.",speechlang:"en"},
+ tr:{showscreen:"Ezan ekranını göster",showscreen_desc:"Ezan vaktinde tam ekran",speakpre:"Sesli ezan öncesi uyarı",speakpre_desc:"Ton yerine “… vakti yaklaştı” desin",soon_spoken:"{p} vakti yaklaştı",notif_blocked:"Bildirimler burada engelli — tarayıcıda aç veya Chrome'da aç.",notif_app:"Arka plan bildirimleri gelecek bir güncellemede gelecek.",speechlang:"tr"}
 };
 Object.keys(EXTRA).forEach(lg=>{if(L[lg])Object.assign(L[lg],EXTRA[lg]);});
 function T(){return L[S.lang]||L.ar;}
@@ -381,6 +381,8 @@ const BUILTIN=Array.from({length:17},(_,i)=>({id:i+1,url:"sounds/adhan-"+String(
 function builtinUrl(id){const b=BUILTIN.find(x=>x.id===id);return b?b.url:null;}
 const BUILTIN_DUA=[{k:"bd1",n:1,url:"sounds/dua-01.mp3"}];
 function duaUrl(k){const d=BUILTIN_DUA.find(x=>x.k===k);return d?d.url:null;}
+const IS_APP=(location.protocol==="file:");
+function notifMsg(){return IS_APP?t("notif_app"):t("notif_blocked");}
 const DEF={city:"duhok",lang:"ar",theme:"auto",bg:"dawn",pre:10,flipStop:false,showScreen:true,speakPre:false,duaOn:false,duaActive:"bd1",duaVoices:[],defBuiltin:1,clock24:false,prayerSnd:{},
   adhanOn:{fajr:true,dhuhr:true,asr:true,maghrib:true,isha:true},
   offsets:{fajr:0,sunrise:0,dhuhr:0,asr:0,maghrib:0,isha:0}};
@@ -474,7 +476,7 @@ function tick(){
     if(S.pre>0){const pre=((pm-S.pre)%1440+1440)%1440;const kP=today+k+"p";if(curM===pre&&now.getSeconds()<2&&!lastFired[kP]){lastFired[kP]=1;firePre(k);}}});
 }
 function notify(title,body){try{if("Notification"in window&&Notification.permission==="granted")new Notification(title,{body});}catch(e){}}
-function notifDone(res){buildSettings();if(res!=="granted")toast(t("notif_blocked"));}
+function notifDone(res){buildSettings();if(res!=="granted")toast(notifMsg());}
 function fireAdhan(k){const nm=T().p[k];notify(t("prayertime",{p:nm}),T().c[S.city]);if(S.showScreen){$("#adhanTitle").textContent=t("prayertime",{p:nm});$("#adhanTime").textContent=fmt(timesFor(S.city,new Date())[k]);$("#adhanOverlay").classList.add("show");}if(S.flipStop)startFlip();playAdhan(k,true);renderList();}
 function firePre(k){notify(t("soonbefore",{m:S.pre,p:T().p[k]}),T().c[S.city]);if(S.speakPre)speak(t("soon_spoken",{p:T().p[k]}),t("speechlang"));else tone();}
 
@@ -533,8 +535,8 @@ function buildSettings(){
   const granted=window.Notification&&Notification.permission==="granted";
   $("#notifState").textContent=granted?t("notif_on"):t("notif_off");$("#notifSwitch").classList.toggle("on",granted);
   $("#notifSwitch").onclick=()=>{
-    if(!("Notification"in window)){toast(t("notif_blocked"));return;}
-    try{const r=Notification.requestPermission(res=>notifDone(res));if(r&&r.then)r.then(notifDone);}catch(e){toast(t("notif_blocked"));}
+    if(IS_APP||!("Notification"in window)){toast(notifMsg());return;}
+    try{const r=Notification.requestPermission(res=>notifDone(res));if(r&&r.then)r.then(notifDone);}catch(e){toast(notifMsg());}
   };
   $("#screenSwitch").classList.toggle("on",S.showScreen);
   $("#screenSwitch").onclick=()=>{S.showScreen=!S.showScreen;$("#screenSwitch").classList.toggle("on",S.showScreen);save();};
