@@ -216,6 +216,7 @@
         <button class="chip" data-theme="light" data-i18n="theme_light">فاتح</button>
         <button class="chip" data-theme="dark" data-i18n="theme_dark">داكن</button>
       </div></div>
+    <div class="opt"><div><div class="t" data-i18n="clockfmt">نظام ٢٤ ساعة</div><div class="d" data-i18n="clockfmt_desc">إيقاف = نظام ١٢ ساعة (ص/م)</div></div><button class="switch" id="clockSwitch"></button></div>
     <div class="opt" style="flex-direction:column;align-items:stretch;gap:10px">
       <div class="t" id="bgTitle">الخلفية</div>
       <div class="chip-row" id="bgChips"></div>
@@ -271,7 +272,7 @@ const PKEYS=["fajr","sunrise","dhuhr","asr","maghrib","isha"];
 const MONTH_STARTS=[0,31,59,90,120,151,181,212,243,273,304,334];
 
 const L={
- ar:{dir:"rtl",name:"عربي",settings:"الإعدادات",language:"اللغة",theme:"المظهر",theme_auto:"تلقائي",theme_light:"فاتح",theme_dark:"داكن",
+ ar:{dir:"rtl",name:"عربي",settings:"الإعدادات",language:"اللغة",theme:"المظهر",theme_auto:"تلقائي",theme_light:"فاتح",theme_dark:"داكن",clockfmt:"نظام ٢٤ ساعة",clockfmt_desc:"إيقاف = نظام ١٢ ساعة (ص/م)",
   notif:"التنبيهات",notif_on:"مفعّلة",notif_off:"غير مفعّلة",pre:"تنبيه قبل الأذان",pre_desc:"تذكير قبل دخول الوقت بدقائق",min:"د",
   flipstop:"إيقاف الأذان بقلب الجهاز",flipstop_desc:"اقلب الهاتف على وجهه ليتوقف الأذان",
   defsound:"صوت افتراضي للأذان",choosefile:"اختر ملف",builtin:"نغمة مدمجة",samedefault:"نفس الصوت الافتراضي",adhan_n:"أذان {n}",
@@ -285,7 +286,7 @@ const L={
   vnote:"النسخة الأولى (ويب). للأذان في الخلفية والجهاز مقفل يلزم نسخة أندرويد أصلية لاحقاً.",
   azan:n=>"أذان "+n,p:{fajr:"الفجر",sunrise:"الشروق",dhuhr:"الظهر",asr:"العصر",maghrib:"المغرب",isha:"العشاء"},
   c:{duhok:"دهوك",erbil:"أربيل",sulaymaniyah:"السليمانية"},hijriLoc:"ar-SA-u-ca-islamic-umalqura"},
- sor:{dir:"rtl",name:"سۆرانی",settings:"ڕێکخستنەکان",language:"زمان",theme:"ڕووکار",theme_auto:"خۆکار",theme_light:"ڕووناک",theme_dark:"تاریک",
+ sor:{dir:"rtl",name:"سۆرانی",settings:"ڕێکخستنەکان",language:"زمان",theme:"ڕووکار",theme_auto:"خۆکار",theme_light:"ڕووناک",theme_dark:"تاریک",clockfmt:"سیستەمی ٢٤ کاتژمێر",clockfmt_desc:"کوژاندنەوە = ١٢ کاتژمێر",
   notif:"ئاگادارکردنەوەکان",notif_on:"چالاک",notif_off:"ناچالاک",pre:"ئاگادارکردنەوە پێش بانگ",pre_desc:"بیرخستنەوە پێش کاتەکە بە چەند خولەک",min:"خ",
   flipstop:"وەستانی بانگ بە هەڵگەڕانی مۆبایل",flipstop_desc:"مۆبایل بەسەرڕووی دابنێ بۆ وەستانی بانگ",
   defsound:"دەنگی بنەڕەتی بۆ بانگ",choosefile:"فایل هەڵبژێرە",builtin:"دەنگی ناوخۆیی",samedefault:"هەمان دەنگی بنەڕەتی",adhan_n:"بانگ {n}",
@@ -299,7 +300,7 @@ const L={
   vnote:"وەشانی یەکەم (وێب). بۆ بانگ لە پاشبنەما پێویستی بە وەشانی ئەندرۆیدی ڕەسەن هەیە دواتر.",
   azan:n=>"بانگی "+n,p:{fajr:"بەیانی",sunrise:"خۆرهەڵات",dhuhr:"نیوەڕۆ",asr:"عەسر",maghrib:"مەغریب",isha:"عیشا"},
   c:{duhok:"دهۆک",erbil:"هەولێر",sulaymaniyah:"سلێمانی"},hijriLoc:"ar-SA-u-ca-islamic-umalqura"},
- kmr:{dir:"rtl",name:"بادینی",settings:"ڕێکخستن",language:"زمان",theme:"دیمەن",theme_auto:"خۆبەخۆ",theme_light:"ڕۆناك",theme_dark:"تاری",
+ kmr:{dir:"rtl",name:"بادینی",settings:"ڕێکخستن",language:"زمان",theme:"دیمەن",theme_auto:"خۆبەخۆ",theme_light:"ڕۆناك",theme_dark:"تاری",clockfmt:"سیستەما ٢٤ دەمژمێر",clockfmt_desc:"وەنگاندن = ١٢ دەمژمێر",
   notif:"ئاگەهداری",notif_on:"چالاک",notif_off:"ناچالاک",pre:"ئاگەهداری بەری بانگێ",pre_desc:"بیرئینان بەری دەمی ب چەند خولەکان",min:"خ",
   flipstop:"راوەستاندنا بانگێ ب هەڵگەڕاندنا مۆبایلی",flipstop_desc:"مۆبایلی سەر ڕویێ وی دانە دا بانگ بوەستیت",
   defsound:"دەنگێ بنەڕەتی بۆ بانگێ",choosefile:"فایلەکێ هەلبژێرە",builtin:"دەنگێ ناڤخۆیی",samedefault:"هەمان دەنگێ بنەڕەتی",adhan_n:"بانگ {n}",
@@ -313,7 +314,7 @@ const L={
   vnote:"وەشانا ئێکێ (وێب). بۆ بانگێ د پشتبنەما پێدڤی ب وەشانا ئەندرۆیدا ڕەسەن هەیە پاشتر.",
   azan:n=>"بانگا "+n,p:{fajr:"بەیانی",sunrise:"رۆژهەلات",dhuhr:"نیڤرۆ",asr:"عەسر",maghrib:"مەغریب",isha:"عیشا"},
   c:{duhok:"دهۆک",erbil:"هەولێر",sulaymaniyah:"سلێمانی"},hijriLoc:"ar-SA-u-ca-islamic-umalqura"},
- en:{dir:"ltr",name:"English",settings:"Settings",language:"Language",theme:"Theme",theme_auto:"Auto",theme_light:"Light",theme_dark:"Dark",
+ en:{dir:"ltr",name:"English",settings:"Settings",language:"Language",theme:"Theme",theme_auto:"Auto",theme_light:"Light",theme_dark:"Dark",clockfmt:"24-hour clock",clockfmt_desc:"Off = 12-hour (AM/PM)",
   notif:"Notifications",notif_on:"On",notif_off:"Off",pre:"Pre-adhan alert",pre_desc:"Remind this many minutes before",min:"m",
   flipstop:"Flip to stop adhan",flipstop_desc:"Turn the phone face-down to stop the adhan",
   defsound:"Default adhan sound",choosefile:"Choose file",builtin:"Built-in tone",samedefault:"Same as default",adhan_n:"Adhan {n}",
@@ -327,7 +328,7 @@ const L={
   vnote:"First version (web). Background adhan with the screen locked needs a native Android app later.",
   azan:n=>n+" adhan",p:{fajr:"Fajr",sunrise:"Sunrise",dhuhr:"Dhuhr",asr:"Asr",maghrib:"Maghrib",isha:"Isha"},
   c:{duhok:"Duhok",erbil:"Erbil",sulaymaniyah:"Sulaymaniyah"},hijriLoc:"en-u-ca-islamic-umalqura"},
- tr:{dir:"ltr",name:"Türkçe",settings:"Ayarlar",language:"Dil",theme:"Tema",theme_auto:"Otomatik",theme_light:"Açık",theme_dark:"Koyu",
+ tr:{dir:"ltr",name:"Türkçe",settings:"Ayarlar",language:"Dil",theme:"Tema",theme_auto:"Otomatik",theme_light:"Açık",theme_dark:"Koyu",clockfmt:"24 saat",clockfmt_desc:"Kapalı = 12 saat (ÖÖ/ÖS)",
   notif:"Bildirimler",notif_on:"Açık",notif_off:"Kapalı",pre:"Ezandan önce uyarı",pre_desc:"Vakitten şu kadar dakika önce hatırlat",min:"dk",
   flipstop:"Ters çevirince ezan dursun",flipstop_desc:"Telefonu yüzüstü çevir, ezan dursun",
   defsound:"Varsayılan ezan sesi",choosefile:"Dosya seç",builtin:"Yerleşik ton",samedefault:"Varsayılanla aynı",adhan_n:"Ezan {n}",
@@ -355,7 +356,11 @@ function t(k,vars){let s=T()[k];if(s==null)s=L.ar[k];if(typeof s!=="string")retu
 function speak(txt,lang){try{if(!window.speechSynthesis)return;speechSynthesis.cancel();const lg=(lang||"ar").toLowerCase();const u=new SpeechSynthesisUtterance(txt);u.lang=lg;u.rate=.8;u.pitch=.75;const vs=speechSynthesis.getVoices()||[];const inLang=vs.filter(x=>x.lang&&x.lang.toLowerCase().indexOf(lg)===0);const maleRe=/male|man|rich|majed|tarik|tariq|maged|hamed|hoda|naayf|fahad|amir|karim|omar|zaki|husam|\bdeep\b|#?(2|3|4|5)\b/i;const femaleRe=/female|woman|hoda|laila|salma|zariyah|\bfiona\b/i;let v=inLang.find(x=>maleRe.test(x.name)&&!femaleRe.test(x.name))||inLang.find(x=>!femaleRe.test(x.name))||inLang[0];if(v)u.voice=v;speechSynthesis.speak(u);}catch(e){}}
 
 function toMin(s){const[h,m]=s.split(":").map(Number);return h*60+m;}
-function fmt(mins){mins=((Math.round(mins)%1440)+1440)%1440;const h=Math.floor(mins/60),m=mins%60;return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");}
+const CLOCKLOC={ar:"ar-u-nu-latn",sor:"ar-u-nu-latn",kmr:"ar-u-nu-latn",en:"en-US",tr:"tr-TR"};
+function fmt(mins){mins=((Math.round(mins)%1440)+1440)%1440;const h=Math.floor(mins/60),m=mins%60;
+  if(S.clock24)return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");
+  try{return new Intl.DateTimeFormat(CLOCKLOC[S.lang]||"en-US",{hour:"2-digit",minute:"2-digit",hour12:true}).format(new Date(2000,0,1,h,m));}
+  catch(e){const hh=((h+11)%12)+1;return String(hh).padStart(2,"0")+":"+String(m).padStart(2,"0")+(h<12?" AM":" PM");}}
 function doy(d){const s=new Date(d.getFullYear(),0,0);return Math.floor((d-s)/86400000)-1;}
 function anchorsFor(city,pi){const a=[];for(let m=0;m<12;m++)a.push({t:MONTH_STARTS[m]+14,v:toMin(TBL[city][m][pi])});return a;}
 function interp(points,day){const n=points.length,Y=365;const ts=points.map(p=>p.t),vs=points.map(p=>p.v);const idx=k=>((k%n)+n)%n;let i=0;const dref=day>=ts[0]?day:day+Y;for(let k=0;k<n;k++){const a=ts[k],b=k+1<n?ts[k+1]:ts[0]+Y;if(dref>=a&&dref<b){i=k;break;}if(k===n-1)i=n-1;}const p0=vs[idx(i-1)],p1=vs[idx(i)],p2=vs[idx(i+1)],p3=vs[idx(i+2)];let t0=ts[idx(i)],t1=ts[idx(i+1)];if(t1<=t0)t1+=Y;let dd=dref<t0?dref+Y:dref;let u=(dd-t0)/(t1-t0);u=Math.max(0,Math.min(1,u));const u2=u*u,u3=u2*u;return 0.5*(2*p1+(-p0+p2)*u+(2*p0-5*p1+4*p2-p3)*u2+(-p0+3*p1-3*p2+p3)*u3);}
@@ -373,7 +378,7 @@ const BGLABELS={
 function bgl(k){return (BGLABELS[S.lang]||BGLABELS.ar)[k]||BGLABELS.ar[k];}
 const BUILTIN=Array.from({length:17},(_,i)=>({id:i+1,url:"sounds/adhan-"+String(i+1).padStart(2,"0")+".mp3"}));
 function builtinUrl(id){const b=BUILTIN.find(x=>x.id===id);return b?b.url:null;}
-const DEF={city:"duhok",lang:"ar",theme:"auto",bg:"dawn",pre:10,flipStop:false,showScreen:true,speakPre:false,duaOn:false,duaActive:null,duaVoices:[],defBuiltin:1,
+const DEF={city:"duhok",lang:"ar",theme:"auto",bg:"dawn",pre:10,flipStop:false,showScreen:true,speakPre:false,duaOn:false,duaActive:null,duaVoices:[],defBuiltin:1,clock24:false,
   adhanOn:{fajr:true,dhuhr:true,asr:true,maghrib:true,isha:true},
   offsets:{fajr:0,sunrise:0,dhuhr:0,asr:0,maghrib:0,isha:0}};
 let S=JSON.parse(JSON.stringify(DEF));
@@ -488,6 +493,8 @@ function buildSettings(){
   };
   $("#screenSwitch").classList.toggle("on",S.showScreen);
   $("#screenSwitch").onclick=()=>{S.showScreen=!S.showScreen;$("#screenSwitch").classList.toggle("on",S.showScreen);save();};
+  $("#clockSwitch").classList.toggle("on",S.clock24);
+  $("#clockSwitch").onclick=()=>{S.clock24=!S.clock24;$("#clockSwitch").classList.toggle("on",S.clock24);save();renderList();tick();};
   $("#speakSwitch").classList.toggle("on",S.speakPre);
   $("#speakSwitch").onclick=()=>{S.speakPre=!S.speakPre;if(S.speakPre){try{speechSynthesis&&speechSynthesis.getVoices();}catch(e){}}$("#speakSwitch").classList.toggle("on",S.speakPre);save();};
   $("#speakTest").onclick=()=>{const now=new Date();const tm=timesFor(S.city,now);const nm=now.getHours()*60+now.getMinutes();let nk="dhuhr",best=Infinity;PKEYS.forEach(k=>{if(k==="sunrise")return;let d=tm[k]-nm;if(d<0)d+=1440;if(d<best){best=d;nk=k;}});speak(t("soon_spoken",{p:T().p[nk]}),t("speechlang"));};
