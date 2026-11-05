@@ -46,6 +46,8 @@ object Scheduler {
         val soonTpl = cfg.optString("soonTemplate", "{p}")
         val duaOn = cfg.optBoolean("duaOn", false)
         val dua = cfg.optString("dua", "")
+        val flipStop = cfg.optBoolean("flipStop", false)
+        val showScreen = cfg.optBoolean("showScreen", false)
         val prayers = cfg.optJSONObject("prayers") ?: JSONObject()
         val am = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val now = Calendar.getInstance()
@@ -61,6 +63,7 @@ object Scheduler {
                 putString("key", p); putString("name", name); putString("sound", sound)
                 putBoolean("pre", false); putString("title", adhanTpl.replace("{p}", name))
                 putBoolean("duaOn", duaOn); putString("dua", dua)
+                putBoolean("flipStop", flipStop); putBoolean("showScreen", showScreen)
             }
             setExact(am, cal.timeInMillis, pi(ctx, id, ex))
             if (pre > 0) {

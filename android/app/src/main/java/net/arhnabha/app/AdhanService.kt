@@ -8,6 +8,10 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Build
@@ -17,6 +21,9 @@ import android.os.Looper
 
 class AdhanService : Service() {
     private var mp: MediaPlayer? = null
+    private var sensorMgr: SensorManager? = null
+    private var flipListener: SensorEventListener? = null
+    private var sawUp = false
 
     override fun onBind(i: Intent?): IBinder? = null
 
@@ -29,16 +36,20 @@ class AdhanService : Service() {
         val sound = b?.getString("sound") ?: ""
         val duaOn = b?.getBoolean("duaOn", false) ?: false
         val dua = b?.getString("dua") ?: ""
+        val showScreen = b?.getBoolean("showScreen", false) ?: false
+        val name = b?.getString("name") ?: ""
 
         ensureChannel()
-        val notif = buildNotif(title, pre)
+        val notif = buildNotif(title, pre, showScreen, name)
         try {
             if (Build.VERSION.SDK_INT >= 29)
                 startForeground(1, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
             else startForeground(1, notif)
         } catch (e: Exception) { startForeground(1, notif) }
 
+        val flip = b?.getBoolean("flipStop", false) ?: false
         if (!pre && sound.isNotEmpty()) {
+            if (flip) registerFlip()
             playAsset(sound) {
                 if (duaOn && dua.isNotEmpty()) playAsset(dua) { stopEverything() } else stopEverything()
             }
@@ -46,6 +57,30 @@ class AdhanService : Service() {
             Handler(Looper.getMainLooper()).postDelayed({ stopEverything() }, 2500)
         }
         return START_NOT_STICKY
+    }
+
+    private fun registerFlip() {
+        try {
+            val sm = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            val acc = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) ?: return
+            sawUp = false
+            val lis = object : SensorEventListener {
+                override fun onSensorChanged(e: SensorEvent) {
+                    if (e.values.size < 3) return
+                    val z = e.values[2]
+                    if (z > 5f) sawUp = true
+                    if (sawUp && z < -7.5f) stopEverything()
+                }
+                override fun onAccuracyChanged(s: Sensor?, a: Int) {}
+            }
+            sm.registerListener(lis, acc, SensorManager.SENSOR_DELAY_UI)
+            sensorMgr = sm; flipListener = lis
+        } catch (e: Exception) { }
+    }
+
+    private fun unregisterFlip() {
+        try { flipListener?.let { sensorMgr?.unregisterListener(it) } } catch (e: Exception) { }
+        flipListener = null; sensorMgr = null
     }
 
     private fun playAsset(path: String, onDone: () -> Unit) {
@@ -66,6 +101,7 @@ class AdhanService : Service() {
     }
 
     private fun stopEverything() {
+        unregisterFlip()
         try { mp?.release() } catch (e: Exception) { }
         mp = null
         try { stopForeground(true) } catch (e: Exception) { }
@@ -85,16 +121,27 @@ class AdhanService : Service() {
     }
 
     @Suppress("DEPRECATION")
-    private fun buildNotif(title: String, pre: Boolean): Notification {
+    private fun buildNotif(title: String, pre: Boolean, showScreen: Boolean, name: String): Notification {
         val openFlags = if (Build.VERSION.SDK_INT >= 23) PendingIntent.FLAG_IMMUTABLE else 0
-        val open = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), openFlags)
+        val openIntent = Intent(this, MainActivity::class.java)
+        val open = PendingIntent.getActivity(this, 0, openIntent, openFlags)
         val stopIntent = Intent(this, AdhanService::class.java).setAction("STOP")
         val stop = PendingIntent.getService(this, 1, stopIntent, openFlags)
         val b = if (Build.VERSION.SDK_INT >= 26) Notification.Builder(this, "adhan") else Notification.Builder(this)
         b.setContentTitle(title).setContentText("أرحنا بها")
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentIntent(open).setAutoCancel(true).setOngoing(!pre)
-        if (!pre) b.addAction(Notification.Action.Builder(0, "إيقاف", stop).build())
+        if (!pre) {
+            b.addAction(Notification.Action.Builder(0, "إيقاف", stop).build())
+            if (showScreen) {
+                val fs = Intent(this, MainActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra("showAdhan", true).putExtra("prayerName", name)
+                val fsFlags = openFlags or PendingIntent.FLAG_UPDATE_CURRENT
+                val fsPI = PendingIntent.getActivity(this, 5, fs, fsFlags)
+                b.setFullScreenIntent(fsPI, true)
+            }
+        }
         return b.build()
     }
 }

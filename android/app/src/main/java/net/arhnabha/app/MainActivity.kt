@@ -20,6 +20,8 @@ import android.webkit.WebViewClient
 class MainActivity : Activity() {
 
     private lateinit var web: WebView
+    private var pendingAdhanName: String? = null
+    private var pageLoaded = false
 
     @SuppressLint("SetJavaScriptEnabled", "JavascriptInterface")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +42,12 @@ class MainActivity : Activity() {
 
         web.addJavascriptInterface(WebBridge(this), "AndroidBridge")
 
-        web.webViewClient = WebViewClient()
+        web.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                pageLoaded = true
+                pendingAdhanName?.let { showAdhanInWeb(it); pendingAdhanName = null }
+            }
+        }
         web.webChromeClient = object : WebChromeClient() {
             override fun onGeolocationPermissionsShowPrompt(
                 origin: String?, callback: GeolocationPermissions.Callback?
@@ -57,6 +64,28 @@ class MainActivity : Activity() {
         }
 
         web.loadUrl("file:///android_asset/www/index.html")
+        handleAdhanIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleAdhanIntent(intent)
+    }
+
+    private fun handleAdhanIntent(intent: Intent?) {
+        if (intent?.getBooleanExtra("showAdhan", false) == true) {
+            val name = intent.getStringExtra("prayerName") ?: ""
+            if (Build.VERSION.SDK_INT >= 27) {
+                setShowWhenLocked(true); setTurnScreenOn(true)
+            }
+            if (pageLoaded) showAdhanInWeb(name) else pendingAdhanName = name
+        }
+    }
+
+    private fun showAdhanInWeb(name: String) {
+        val safe = name.replace("'", " ").replace("\\", " ")
+        web.evaluateJavascript("window.showAdhanScreen && window.showAdhanScreen('$safe')", null)
     }
 
     /** Called from JS when the user turns on background notifications. */
