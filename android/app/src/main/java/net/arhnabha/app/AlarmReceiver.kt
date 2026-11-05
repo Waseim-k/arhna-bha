@@ -14,7 +14,15 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(ctx: Context, intent: Intent) {
         val pre = intent.getBooleanExtra("pre", false)
         if (pre) {
-            postPre(ctx, intent.getStringExtra("title") ?: "أرحنا بها")
+            if (intent.getBooleanExtra("speak", false)) {
+                // spoken pre-alert → service handles notification + text-to-speech
+                val svc = Intent(ctx, AdhanService::class.java).putExtras(intent.extras ?: Bundle())
+                try {
+                    if (Build.VERSION.SDK_INT >= 26) ctx.startForegroundService(svc) else ctx.startService(svc)
+                } catch (e: Exception) { }
+            } else {
+                postPre(ctx, intent.getStringExtra("title") ?: "أرحنا بها")
+            }
         } else {
             val svc = Intent(ctx, AdhanService::class.java).putExtras(intent.extras ?: Bundle())
             try {

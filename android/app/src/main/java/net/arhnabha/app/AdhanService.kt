@@ -15,15 +15,22 @@ import android.hardware.SensorManager
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.os.SystemClock
+import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
+import java.util.Locale
 
 class AdhanService : Service() {
     private var mp: MediaPlayer? = null
     private var sensorMgr: SensorManager? = null
     private var flipListener: SensorEventListener? = null
-    private var sawUp = false
+    private var flipArmAt = 0L
+    private var curPre = false
+    private var tts: TextToSpeech? = null
 
     override fun onBind(i: Intent?): IBinder? = null
 
@@ -38,14 +45,17 @@ class AdhanService : Service() {
         val dua = b?.getString("dua") ?: ""
         val showScreen = b?.getBoolean("showScreen", false) ?: false
         val name = b?.getString("name") ?: ""
+        val speak = b?.getBoolean("speak", false) ?: false
+        curPre = pre
 
         ensureChannel()
         val notif = buildNotif(title, pre, showScreen, name)
+        val fgId = if (pre) 2 else 1
         try {
             if (Build.VERSION.SDK_INT >= 29)
-                startForeground(1, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
-            else startForeground(1, notif)
-        } catch (e: Exception) { startForeground(1, notif) }
+                startForeground(fgId, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+            else startForeground(fgId, notif)
+        } catch (e: Exception) { startForeground(fgId, notif) }
 
         val flip = b?.getBoolean("flipStop", false) ?: false
         if (!pre && sound.isNotEmpty()) {
@@ -53,23 +63,45 @@ class AdhanService : Service() {
             playAsset(sound) {
                 if (duaOn && dua.isNotEmpty()) playAsset(dua) { stopEverything() } else stopEverything()
             }
+        } else if (pre && speak) {
+            speakText(title)
+            Handler(Looper.getMainLooper()).postDelayed({ stopEverything() }, 12000) // safety
         } else {
             Handler(Looper.getMainLooper()).postDelayed({ stopEverything() }, 2500)
         }
         return START_NOT_STICKY
     }
 
+    private fun speakText(text: String) {
+        try {
+            val engine = TextToSpeech(this) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    try { tts?.language = Locale("ar") } catch (e: Exception) { }
+                    try {
+                        tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                            override fun onStart(id: String?) {}
+                            override fun onDone(id: String?) { stopEverything() }
+                            @Deprecated("Deprecated in Java")
+                            override fun onError(id: String?) { stopEverything() }
+                        })
+                    } catch (e: Exception) { }
+                    try { tts?.speak(text, TextToSpeech.QUEUE_FLUSH, Bundle(), "pre") } catch (e: Exception) { stopEverything() }
+                } else stopEverything()
+            }
+            tts = engine
+        } catch (e: Exception) { }
+    }
+
     private fun registerFlip() {
         try {
             val sm = getSystemService(Context.SENSOR_SERVICE) as SensorManager
             val acc = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) ?: return
-            sawUp = false
+            flipArmAt = SystemClock.elapsedRealtime() + 1200 // arm after 1.2s to avoid instant stop
             val lis = object : SensorEventListener {
                 override fun onSensorChanged(e: SensorEvent) {
                     if (e.values.size < 3) return
-                    val z = e.values[2]
-                    if (z > 5f) sawUp = true
-                    if (sawUp && z < -7.5f) stopEverything()
+                    // face-down: z strongly negative (phone screen down)
+                    if (SystemClock.elapsedRealtime() > flipArmAt && e.values[2] < -7.5f) stopEverything()
                 }
                 override fun onAccuracyChanged(s: Sensor?, a: Int) {}
             }
@@ -104,7 +136,13 @@ class AdhanService : Service() {
         unregisterFlip()
         try { mp?.release() } catch (e: Exception) { }
         mp = null
-        try { stopForeground(true) } catch (e: Exception) { }
+        try { tts?.stop(); tts?.shutdown() } catch (e: Exception) { }
+        tts = null
+        try {
+            if (Build.VERSION.SDK_INT >= 24)
+                stopForeground(if (curPre) Service.STOP_FOREGROUND_DETACH else Service.STOP_FOREGROUND_REMOVE)
+            else @Suppress("DEPRECATION") stopForeground(!curPre)
+        } catch (e: Exception) { }
         stopSelf()
     }
 
