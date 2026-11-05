@@ -168,6 +168,7 @@
   <div class="topbar">
     <button class="city-btn" id="cityBtn"><span class="chev">▾</span><span id="cityName">دهوك</span></button>
     <div class="actions">
+      <button class="btn3d" id="installBtn" hidden data-i18n="install" style="display:inline-flex;align-items:center;gap:3px;background:var(--accent);color:#fff;border:none;border-radius:999px;padding:7px 12px;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer">⬇ تثبيت</button>
       <button class="icon-btn" id="openQibla" aria-label="qibla">🧭</button>
       <button class="icon-btn" id="openSettings" aria-label="settings">⚙</button>
     </div>
@@ -272,7 +273,7 @@ const PKEYS=["fajr","sunrise","dhuhr","asr","maghrib","isha"];
 const MONTH_STARTS=[0,31,59,90,120,151,181,212,243,273,304,334];
 
 const L={
- ar:{dir:"rtl",name:"عربي",settings:"الإعدادات",language:"اللغة",theme:"المظهر",theme_auto:"تلقائي",theme_light:"فاتح",theme_dark:"داكن",clockfmt:"نظام ٢٤ ساعة",clockfmt_desc:"إيقاف = نظام ١٢ ساعة (ص/م)",
+ ar:{dir:"rtl",name:"عربي",settings:"الإعدادات",install:"⬇ تثبيت",installed:"تم تثبيت التطبيق ✓",language:"اللغة",theme:"المظهر",theme_auto:"تلقائي",theme_light:"فاتح",theme_dark:"داكن",clockfmt:"نظام ٢٤ ساعة",clockfmt_desc:"إيقاف = نظام ١٢ ساعة (ص/م)",
   notif:"التنبيهات",notif_on:"مفعّلة",notif_off:"غير مفعّلة",pre:"تنبيه قبل الأذان",pre_desc:"تذكير قبل دخول الوقت بدقائق",min:"د",
   flipstop:"إيقاف الأذان بقلب الجهاز",flipstop_desc:"اقلب الهاتف على وجهه ليتوقف الأذان",
   defsound:"صوت افتراضي للأذان",choosefile:"اختر ملف",builtin:"نغمة مدمجة",samedefault:"نفس الصوت الافتراضي",adhan_n:"أذان {n}",
@@ -286,7 +287,7 @@ const L={
   vnote:"النسخة الأولى (ويب). للأذان في الخلفية والجهاز مقفل يلزم نسخة أندرويد أصلية لاحقاً.",
   azan:n=>"أذان "+n,p:{fajr:"الفجر",sunrise:"الشروق",dhuhr:"الظهر",asr:"العصر",maghrib:"المغرب",isha:"العشاء"},
   c:{duhok:"دهوك",erbil:"أربيل",sulaymaniyah:"السليمانية"},hijriLoc:"ar-SA-u-ca-islamic-umalqura"},
- sor:{dir:"rtl",name:"سۆرانی",settings:"ڕێکخستنەکان",language:"زمان",theme:"ڕووکار",theme_auto:"خۆکار",theme_light:"ڕووناک",theme_dark:"تاریک",clockfmt:"سیستەمی ٢٤ کاتژمێر",clockfmt_desc:"کوژاندنەوە = ١٢ کاتژمێر",
+ sor:{dir:"rtl",name:"سۆرانی",settings:"ڕێکخستنەکان",install:"⬇ دامەزراندن",installed:"ئەپ دامەزرا ✓",language:"زمان",theme:"ڕووکار",theme_auto:"خۆکار",theme_light:"ڕووناک",theme_dark:"تاریک",clockfmt:"سیستەمی ٢٤ کاتژمێر",clockfmt_desc:"کوژاندنەوە = ١٢ کاتژمێر",
   notif:"ئاگادارکردنەوەکان",notif_on:"چالاک",notif_off:"ناچالاک",pre:"ئاگادارکردنەوە پێش بانگ",pre_desc:"بیرخستنەوە پێش کاتەکە بە چەند خولەک",min:"خ",
   flipstop:"وەستانی بانگ بە هەڵگەڕانی مۆبایل",flipstop_desc:"مۆبایل بەسەرڕووی دابنێ بۆ وەستانی بانگ",
   defsound:"دەنگی بنەڕەتی بۆ بانگ",choosefile:"فایل هەڵبژێرە",builtin:"دەنگی ناوخۆیی",samedefault:"هەمان دەنگی بنەڕەتی",adhan_n:"بانگ {n}",
@@ -300,7 +301,7 @@ const L={
   vnote:"وەشانی یەکەم (وێب). بۆ بانگ لە پاشبنەما پێویستی بە وەشانی ئەندرۆیدی ڕەسەن هەیە دواتر.",
   azan:n=>"بانگی "+n,p:{fajr:"بەیانی",sunrise:"خۆرهەڵات",dhuhr:"نیوەڕۆ",asr:"عەسر",maghrib:"مەغریب",isha:"عیشا"},
   c:{duhok:"دهۆک",erbil:"هەولێر",sulaymaniyah:"سلێمانی"},hijriLoc:"ar-SA-u-ca-islamic-umalqura"},
- kmr:{dir:"rtl",name:"بادینی",settings:"ڕێکخستن",language:"زمان",theme:"دیمەن",theme_auto:"خۆبەخۆ",theme_light:"ڕۆناك",theme_dark:"تاری",clockfmt:"سیستەما ٢٤ دەمژمێر",clockfmt_desc:"وەنگاندن = ١٢ دەمژمێر",
+ kmr:{dir:"rtl",name:"بادینی",settings:"ڕێکخستن",install:"⬇ داناین",installed:"ئەپ هاتە داناین ✓",language:"زمان",theme:"دیمەن",theme_auto:"خۆبەخۆ",theme_light:"ڕۆناك",theme_dark:"تاری",clockfmt:"سیستەما ٢٤ دەمژمێر",clockfmt_desc:"وەنگاندن = ١٢ دەمژمێر",
   notif:"ئاگەهداری",notif_on:"چالاک",notif_off:"ناچالاک",pre:"ئاگەهداری بەری بانگێ",pre_desc:"بیرئینان بەری دەمی ب چەند خولەکان",min:"خ",
   flipstop:"راوەستاندنا بانگێ ب هەڵگەڕاندنا مۆبایلی",flipstop_desc:"مۆبایلی سەر ڕویێ وی دانە دا بانگ بوەستیت",
   defsound:"دەنگێ بنەڕەتی بۆ بانگێ",choosefile:"فایلەکێ هەلبژێرە",builtin:"دەنگێ ناڤخۆیی",samedefault:"هەمان دەنگێ بنەڕەتی",adhan_n:"بانگ {n}",
@@ -314,7 +315,7 @@ const L={
   vnote:"وەشانا ئێکێ (وێب). بۆ بانگێ د پشتبنەما پێدڤی ب وەشانا ئەندرۆیدا ڕەسەن هەیە پاشتر.",
   azan:n=>"بانگا "+n,p:{fajr:"بەیانی",sunrise:"رۆژهەلات",dhuhr:"نیڤرۆ",asr:"عەسر",maghrib:"مەغریب",isha:"عیشا"},
   c:{duhok:"دهۆک",erbil:"هەولێر",sulaymaniyah:"سلێمانی"},hijriLoc:"ar-SA-u-ca-islamic-umalqura"},
- en:{dir:"ltr",name:"English",settings:"Settings",language:"Language",theme:"Theme",theme_auto:"Auto",theme_light:"Light",theme_dark:"Dark",clockfmt:"24-hour clock",clockfmt_desc:"Off = 12-hour (AM/PM)",
+ en:{dir:"ltr",name:"English",settings:"Settings",install:"⬇ Install",installed:"App installed ✓",language:"Language",theme:"Theme",theme_auto:"Auto",theme_light:"Light",theme_dark:"Dark",clockfmt:"24-hour clock",clockfmt_desc:"Off = 12-hour (AM/PM)",
   notif:"Notifications",notif_on:"On",notif_off:"Off",pre:"Pre-adhan alert",pre_desc:"Remind this many minutes before",min:"m",
   flipstop:"Flip to stop adhan",flipstop_desc:"Turn the phone face-down to stop the adhan",
   defsound:"Default adhan sound",choosefile:"Choose file",builtin:"Built-in tone",samedefault:"Same as default",adhan_n:"Adhan {n}",
@@ -328,7 +329,7 @@ const L={
   vnote:"First version (web). Background adhan with the screen locked needs a native Android app later.",
   azan:n=>n+" adhan",p:{fajr:"Fajr",sunrise:"Sunrise",dhuhr:"Dhuhr",asr:"Asr",maghrib:"Maghrib",isha:"Isha"},
   c:{duhok:"Duhok",erbil:"Erbil",sulaymaniyah:"Sulaymaniyah"},hijriLoc:"en-u-ca-islamic-umalqura"},
- tr:{dir:"ltr",name:"Türkçe",settings:"Ayarlar",language:"Dil",theme:"Tema",theme_auto:"Otomatik",theme_light:"Açık",theme_dark:"Koyu",clockfmt:"24 saat",clockfmt_desc:"Kapalı = 12 saat (ÖÖ/ÖS)",
+ tr:{dir:"ltr",name:"Türkçe",settings:"Ayarlar",install:"⬇ Yükle",installed:"Uygulama yüklendi ✓",language:"Dil",theme:"Tema",theme_auto:"Otomatik",theme_light:"Açık",theme_dark:"Koyu",clockfmt:"24 saat",clockfmt_desc:"Kapalı = 12 saat (ÖÖ/ÖS)",
   notif:"Bildirimler",notif_on:"Açık",notif_off:"Kapalı",pre:"Ezandan önce uyarı",pre_desc:"Vakitten şu kadar dakika önce hatırlat",min:"dk",
   flipstop:"Ters çevirince ezan dursun",flipstop_desc:"Telefonu yüzüstü çevir, ezan dursun",
   defsound:"Varsayılan ezan sesi",choosefile:"Dosya seç",builtin:"Yerleşik ton",samedefault:"Varsayılanla aynı",adhan_n:"Ezan {n}",
@@ -552,6 +553,12 @@ function buildBgChips(){const el=$("#bgChips");if(!el)return;el.innerHTML="";$("
   BGS.forEach(id=>{const b=document.createElement("button");b.className="chip btn3d"+((S.bg===id)?" active":"");b.textContent=bgl(id);b.onclick=()=>{S.bg=id;save();applyBg();buildBgChips();};el.appendChild(b);});
   const inp=$("#bgFile");if(inp)inp.onchange=e=>setCustomBg(e.target.files[0]);}
 
+let deferredPrompt=null;
+function updateInstallBtn(){const b=$("#installBtn");if(!b)return;let standalone=false;try{standalone=(window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches)||window.navigator.standalone===true;}catch(e){}b.hidden=!(deferredPrompt&&!standalone);}
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;updateInstallBtn();});
+window.addEventListener("appinstalled",()=>{deferredPrompt=null;updateInstallBtn();try{toast(t("installed"));}catch(e){}});
+$("#installBtn").onclick=async()=>{if(!deferredPrompt)return;try{deferredPrompt.prompt();await deferredPrompt.userChoice;}catch(e){}deferredPrompt=null;updateInstallBtn();};
+updateInstallBtn();
 applyTheme();applyBg();applyI18n();renderList();openDB().then(()=>{if(S.bg==="custom")applyBg();});
 tick();setInterval(tick,1000);setInterval(renderList,30000);
 </script>
