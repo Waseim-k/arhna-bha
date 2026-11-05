@@ -6,7 +6,8 @@ import android.content.Intent
 
 class BootReceiver : BroadcastReceiver() {
     override fun onReceive(ctx: Context, intent: Intent) {
-        // Re-arm all alarms after reboot / app update.
+        // Re-arm all alarms and refresh widgets after reboot / app update.
         Scheduler.scheduleAll(ctx)
+        Widgets.updateAll(ctx)
     }
 }

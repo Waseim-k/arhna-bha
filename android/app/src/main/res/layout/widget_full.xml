@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="14dp"
+    android:background="@drawable/widget_bg_light">
+
+    <TextView android:id="@+id/wNextLbl"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textSize="12sp" android:textColor="#6B5B73" android:text=""/>
+
+    <Chronometer android:id="@+id/wChrono"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textSize="34sp" android:textStyle="bold" android:textColor="#C25D78"
+        android:fontFamily="monospace"/>
+
+    <TextView android:id="@+id/wNextName"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textSize="15sp" android:textStyle="bold" android:textColor="#4A4458"
+        android:layout_marginBottom="8dp" android:text=""/>
+
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layoutDirection="rtl" android:weightSum="6">
+
+        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+            <TextView android:id="@+id/wN0" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="10sp" android:textColor="#6B5B73"/>
+            <TextView android:id="@+id/wT0" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12sp" android:textStyle="bold" android:textColor="#4A4458"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+            <TextView android:id="@+id/wN1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="10sp" android:textColor="#6B5B73"/>
+            <TextView android:id="@+id/wT1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12sp" android:textStyle="bold" android:textColor="#4A4458"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+            <TextView android:id="@+id/wN2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="10sp" android:textColor="#6B5B73"/>
+            <TextView android:id="@+id/wT2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12sp" android:textStyle="bold" android:textColor="#4A4458"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+            <TextView android:id="@+id/wN3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="10sp" android:textColor="#6B5B73"/>
+            <TextView android:id="@+id/wT3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12sp" android:textStyle="bold" android:textColor="#4A4458"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+            <TextView android:id="@+id/wN4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="10sp" android:textColor="#6B5B73"/>
+            <TextView android:id="@+id/wT4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12sp" android:textStyle="bold" android:textColor="#4A4458"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+            <TextView android:id="@+id/wN5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="10sp" android:textColor="#6B5B73"/>
+            <TextView android:id="@+id/wT5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12sp" android:textStyle="bold" android:textColor="#4A4458"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

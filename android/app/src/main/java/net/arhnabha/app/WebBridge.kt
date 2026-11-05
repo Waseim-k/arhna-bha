@@ -16,6 +16,7 @@ class WebBridge(private val act: Activity) {
     fun saveConfig(json: String) {
         Scheduler.saveConfig(act, json)
         Scheduler.scheduleAll(act)
+        Widgets.updateAll(act)
     }
 
     @JavascriptInterface

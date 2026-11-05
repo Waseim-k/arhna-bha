@@ -21,8 +21,9 @@ class AlarmReceiver : BroadcastReceiver() {
                 if (Build.VERSION.SDK_INT >= 26) ctx.startForegroundService(svc) else ctx.startService(svc)
             } catch (e: Exception) { }
         }
-        // Re-arm next occurrences.
+        // Re-arm next occurrences and refresh widgets.
         Scheduler.scheduleAll(ctx)
+        Widgets.updateAll(ctx)
     }
 
     @Suppress("DEPRECATION")

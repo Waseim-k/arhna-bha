@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="12dp"
+    android:background="@drawable/widget_bg_light">
+
+    <TextView android:id="@+id/wNextLbl"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textSize="12sp" android:textColor="#6B5B73" android:text=""/>
+
+    <Chronometer android:id="@+id/wChrono"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textSize="30sp" android:textStyle="bold" android:textColor="#C25D78"
+        android:fontFamily="monospace"/>
+
+    <TextView android:id="@+id/wNextName"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textSize="15sp" android:textStyle="bold" android:textColor="#4A4458" android:text=""/>
+</LinearLayout>
