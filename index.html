@@ -458,26 +458,43 @@ function startFlip(){if(motionOn)return;try{window.addEventListener("devicemotio
 function stopFlip(){if(motionOn){window.removeEventListener("devicemotion",onMotion);motionOn=false;}}
 function askMotion(){try{if(window.DeviceMotionEvent&&DeviceMotionEvent.requestPermission)DeviceMotionEvent.requestPermission().catch(()=>{});}catch(e){}}
 
-/* sheets */
-function openSheet(w){if(w==="city"){buildCityList();show("City");}else if(w==="q"){openQibla();}else{buildSettings();show("Set");}}
+/* sheets — with hardware back-button handling (back closes the sheet, not the app) */
+let histLayer=null;
+function openSheet(w){histLayer=w;try{history.pushState({sheet:w},"");}catch(e){}
+  if(w==="city"){buildCityList();show("City");}else if(w==="q"){openQibla();}else{buildSettings();show("Set");}}
+function doCloseLayer(w){if(w==="q")closeQibla();else hide(w==="city"?"City":"Set");}
+function closeSheet(){if(histLayer){try{history.back();}catch(e){const w=histLayer;histLayer=null;doCloseLayer(w);}}}
+window.addEventListener("popstate",()=>{if(histLayer){const w=histLayer;histLayer=null;doCloseLayer(w);}});
 function show(x){$("#scrim"+x).classList.add("show");$("#sheet"+x).classList.add("show");}
 function hide(x){$("#scrim"+x).classList.remove("show");$("#sheet"+x).classList.remove("show");}
 $("#cityBtn").onclick=()=>openSheet("city");
 $("#openSettings").onclick=()=>openSheet("set");
 $("#openQibla").onclick=()=>openSheet("q");
-$("#scrimCity").onclick=()=>hide("City");
-$("#scrimSet").onclick=()=>hide("Set");
-$("#scrimQ").onclick=()=>closeQibla();
-$$("[data-close]").forEach(b=>b.onclick=()=>{const w=b.dataset.close;if(w==="q")closeQibla();else hide(w==="city"?"City":"Set");});
+$("#scrimCity").onclick=()=>closeSheet();
+$("#scrimSet").onclick=()=>closeSheet();
+$("#scrimQ").onclick=()=>closeSheet();
+$$("[data-close]").forEach(b=>b.onclick=()=>closeSheet());
 
-function buildCityList(){const el=$("#cityList");el.innerHTML="";Object.keys(COORD).forEach(k=>{const d=document.createElement("button");d.className="city-opt btn3d"+(k===S.city?" active":"");d.innerHTML=`<span>${T().c[k]}</span>${k===S.city?'<span class="mark">✓</span>':''}`;d.onclick=()=>{S.city=k;save();renderList();tick();hide("City");};el.appendChild(d);});}
+function buildCityList(){const el=$("#cityList");el.innerHTML="";Object.keys(COORD).forEach(k=>{const d=document.createElement("button");d.className="city-opt btn3d"+(k===S.city?" active":"");d.innerHTML=`<span>${T().c[k]}</span>${k===S.city?'<span class="mark">✓</span>':''}`;d.onclick=()=>{S.city=k;save();renderList();tick();closeSheet();};el.appendChild(d);});}
 $("#gpsBtn").onclick=()=>{const msg=$("#gpsMsg");msg.textContent=t("gps_wait");if(!navigator.geolocation){msg.textContent=t("gps_no");return;}navigator.geolocation.getCurrentPosition(pos=>{const{latitude:la,longitude:lo}=pos.coords;let best=null,bd=Infinity;Object.entries(COORD).forEach(([k,c])=>{const dd=(c[0]-la)**2+(c[1]-lo)**2;if(dd<bd){bd=dd;best=k;}});S.city=best;save();renderList();tick();msg.textContent=t("gps_ok",{c:T().c[best]});buildCityList();},()=>{msg.textContent=t("gps_fail");},{timeout:8000});};
 
 /* qibla */
-let qHeading=null,qOn=false,qAbs=false;
-function updateQArrow(){const b=qiblaBearing(S.city);$("#qDeg").textContent=t("qibla_from_n",{d:Math.round(b)});if(qHeading==null){$("#qArrow").style.transform="rotate("+b+"deg)";$("#qTip").textContent=t("qibla_nocompass");}else{$("#qArrow").style.transform="rotate("+(b-qHeading)+"deg)";$("#qTip").textContent=t(qAbs?"qibla_tip":"qibla_rel");}}
-function orient(e){let h=null;if(typeof e.webkitCompassHeading==="number")h=e.webkitCompassHeading;else if(typeof e.alpha==="number")h=(360-e.alpha)%360;if(h==null)return;qAbs=qAbs||!!e.absolute;qHeading=h;updateQArrow();}
-async function openQibla(){show("Q");qHeading=null;qAbs=false;updateQArrow();try{if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission){const p=await DeviceOrientationEvent.requestPermission();if(p!=="granted")return;}window.addEventListener("deviceorientationabsolute",orient,true);window.addEventListener("deviceorientation",orient,true);qOn=true;}catch(e){}}
+let qHeading=null,qOn=false,qAbs=false,qSmooth=null,qRot=0;
+function updateQArrow(){const b=qiblaBearing(S.city);$("#qDeg").textContent=t("qibla_from_n",{d:Math.round(b)});
+  if(qHeading==null){qRot=b;$("#qArrow").style.transform="rotate("+b+"deg)";$("#qTip").textContent=t("qibla_nocompass");return;}
+  const target=((b-qHeading)%360+360)%360;
+  let d=((target-qRot)%360+540)%360-180;qRot=qRot+d; // nearest-path to avoid 360° spins
+  $("#qArrow").style.transform="rotate("+qRot+"deg)";
+  $("#qTip").textContent=t(qAbs?"qibla_tip":"qibla_rel");}
+function orient(e){let h=null,isAbs=false;
+  if(typeof e.webkitCompassHeading==="number"){h=e.webkitCompassHeading;isAbs=true;}
+  else if(typeof e.alpha==="number"){h=(360-e.alpha)%360;isAbs=!!e.absolute;}
+  if(h==null)return;
+  if(qAbs&&!isAbs)return; // once true-north (absolute) is available, ignore drifting relative events
+  if(isAbs)qAbs=true;
+  if(qSmooth==null)qSmooth=h;else{let dd=((h-qSmooth)%360+540)%360-180;qSmooth=(qSmooth+dd*0.25+360)%360;} // low-pass, wrap-safe
+  qHeading=qSmooth;updateQArrow();}
+async function openQibla(){show("Q");qHeading=null;qAbs=false;qSmooth=null;qRot=0;updateQArrow();try{if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission){const p=await DeviceOrientationEvent.requestPermission();if(p!=="granted")return;}window.addEventListener("deviceorientationabsolute",orient,true);window.addEventListener("deviceorientation",orient,true);qOn=true;}catch(e){}}
 function closeQibla(){hide("Q");if(qOn){window.removeEventListener("deviceorientationabsolute",orient,true);window.removeEventListener("deviceorientation",orient,true);qOn=false;}qHeading=null;}
 
 function applyI18n(){document.documentElement.setAttribute("dir",T().dir);document.body.setAttribute("dir",T().dir);$$("[data-i18n]").forEach(el=>{const v=t(el.dataset.i18n);if(v)el.textContent=v;});$("#foot").innerHTML=t("foot");}
