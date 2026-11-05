@@ -227,8 +227,15 @@
     <div class="opt"><div><div class="t" data-i18n="flipstop">إيقاف الأذان بقلب الجهاز</div><div class="d" data-i18n="flipstop_desc"></div></div><button class="switch" id="flipSwitch"></button></div>
     <div class="opt"><div><div class="t" data-i18n="showscreen">إظهار شاشة الأذان</div><div class="d" data-i18n="showscreen_desc"></div></div><button class="switch" id="screenSwitch"></button></div>
     <div class="opt"><div><div class="t" data-i18n="speakpre">تنبيه منطوق قبل الأذان</div><div class="d" data-i18n="speakpre_desc"></div></div><div style="display:flex;align-items:center;gap:8px"><button class="icon-btn btn3d" id="speakTest" style="width:38px;height:38px;font-size:.95rem">▶</button><button class="switch" id="speakSwitch"></button></div></div>
-    <div class="opt"><div><div class="t" data-i18n="defsound">صوت افتراضي للأذان</div><div class="d" id="defSoundName"></div></div>
-      <label class="filebtn"><input type="file" id="defSoundFile" accept="audio/*"><span data-i18n="choosefile">اختر ملف</span></label></div>
+    <div class="opt" style="flex-direction:column;align-items:stretch;gap:9px">
+      <div class="t" data-i18n="defsound">صوت افتراضي للأذان</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <select id="defBuiltinSel" style="flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1px solid var(--edge);background:var(--card);color:var(--fg);font-family:inherit;font-size:.95rem"></select>
+        <button class="icon-btn btn3d" id="defBuiltinPlay" style="width:40px;height:40px;flex:0 0 auto;font-size:1rem">▶</button>
+      </div>
+      <label class="filebtn" style="align-self:flex-start"><input type="file" id="defSoundFile" accept="audio/*"><span data-i18n="choosefile">اختر ملف</span></label>
+      <div class="d" id="defSoundName"></div>
+    </div>
     <div class="sec-title" data-i18n="perprayer">أذان كل صلاة</div>
     <div class="prayer-cfg" id="prayerCfg"></div>
     <div class="sec-title" data-i18n="dua">دعاء بعد الأذان</div>
@@ -267,7 +274,7 @@ const L={
  ar:{dir:"rtl",name:"عربي",settings:"الإعدادات",language:"اللغة",theme:"المظهر",theme_auto:"تلقائي",theme_light:"فاتح",theme_dark:"داكن",
   notif:"التنبيهات",notif_on:"مفعّلة",notif_off:"غير مفعّلة",pre:"تنبيه قبل الأذان",pre_desc:"تذكير قبل دخول الوقت بدقائق",min:"د",
   flipstop:"إيقاف الأذان بقلب الجهاز",flipstop_desc:"اقلب الهاتف على وجهه ليتوقف الأذان",
-  defsound:"صوت افتراضي للأذان",choosefile:"اختر ملف",builtin:"نغمة مدمجة",samedefault:"نفس الصوت الافتراضي",
+  defsound:"صوت افتراضي للأذان",choosefile:"اختر ملف",builtin:"نغمة مدمجة",samedefault:"نفس الصوت الافتراضي",adhan_n:"أذان {n}",
   perprayer:"أذان كل صلاة",customsound:"صوت خاص",fineadj:"ضبط دقيق (± دقائق)",fineadj_desc:"صحّح أي فرق بسيط عن مسجدك.",
   dua:"دعاء بعد الأذان",dua_desc:"تشغيل دعاء الأذان بعد انتهائه",dua_add:"➕ إضافة صوت",dua_none:"لا أصوات مضافة.",dua_note:"أضف ملفات تلاوة الدعاء من جهازك ثم اختر الصوت.",delete:"حذف",
   test:"تجربة صوت الأذان",reset:"إعادة الضبط الافتراضي",choose_city:"اختر المدينة",gps:"📍 تحديد تلقائي بالموقع",
@@ -281,7 +288,7 @@ const L={
  sor:{dir:"rtl",name:"سۆرانی",settings:"ڕێکخستنەکان",language:"زمان",theme:"ڕووکار",theme_auto:"خۆکار",theme_light:"ڕووناک",theme_dark:"تاریک",
   notif:"ئاگادارکردنەوەکان",notif_on:"چالاک",notif_off:"ناچالاک",pre:"ئاگادارکردنەوە پێش بانگ",pre_desc:"بیرخستنەوە پێش کاتەکە بە چەند خولەک",min:"خ",
   flipstop:"وەستانی بانگ بە هەڵگەڕانی مۆبایل",flipstop_desc:"مۆبایل بەسەرڕووی دابنێ بۆ وەستانی بانگ",
-  defsound:"دەنگی بنەڕەتی بۆ بانگ",choosefile:"فایل هەڵبژێرە",builtin:"دەنگی ناوخۆیی",samedefault:"هەمان دەنگی بنەڕەتی",
+  defsound:"دەنگی بنەڕەتی بۆ بانگ",choosefile:"فایل هەڵبژێرە",builtin:"دەنگی ناوخۆیی",samedefault:"هەمان دەنگی بنەڕەتی",adhan_n:"بانگ {n}",
   perprayer:"بانگی هەر نوێژێک",customsound:"دەنگی تایبەت",fineadj:"ڕێکخستنی وردی (± خولەک)",fineadj_desc:"جیاوازی بچووک لەگەڵ مزگەوتەکەت ڕاستبکەرەوە.",
   dua:"دوعا دوای بانگ",dua_desc:"لێدانی دوعای بانگ دوای تەواوبوونی",dua_add:"➕ زیادکردنی دەنگ",dua_none:"هیچ دەنگێک زیاد نەکراوە.",dua_note:"فایلی تیلاوەتی دوعا زیاد بکە و دەنگێک هەڵبژێرە.",delete:"سڕینەوە",
   test:"تاقیکردنەوەی دەنگی بانگ",reset:"گەڕانەوە بۆ بنەڕەت",choose_city:"شار هەڵبژێرە",gps:"📍 دیاریکردنی خۆکار بە شوێن",
@@ -295,7 +302,7 @@ const L={
  kmr:{dir:"rtl",name:"بادینی",settings:"ڕێکخستن",language:"زمان",theme:"دیمەن",theme_auto:"خۆبەخۆ",theme_light:"ڕۆناك",theme_dark:"تاری",
   notif:"ئاگەهداری",notif_on:"چالاک",notif_off:"ناچالاک",pre:"ئاگەهداری بەری بانگێ",pre_desc:"بیرئینان بەری دەمی ب چەند خولەکان",min:"خ",
   flipstop:"راوەستاندنا بانگێ ب هەڵگەڕاندنا مۆبایلی",flipstop_desc:"مۆبایلی سەر ڕویێ وی دانە دا بانگ بوەستیت",
-  defsound:"دەنگێ بنەڕەتی بۆ بانگێ",choosefile:"فایلەکێ هەلبژێرە",builtin:"دەنگێ ناڤخۆیی",samedefault:"هەمان دەنگێ بنەڕەتی",
+  defsound:"دەنگێ بنەڕەتی بۆ بانگێ",choosefile:"فایلەکێ هەلبژێرە",builtin:"دەنگێ ناڤخۆیی",samedefault:"هەمان دەنگێ بنەڕەتی",adhan_n:"بانگ {n}",
   perprayer:"بانگا هەر نڤێژەكێ",customsound:"دەنگێ تایبەت",fineadj:"ڕێکخستنا هویر (± خولەک)",fineadj_desc:"جیاوازیا بچویک دگەل مزگەفتا تە ڕاست بکە.",
   dua:"دوعا پشتی بانگێ",dua_desc:"لێدانا دوعایا بانگێ پشتی تەواوبوونێ",dua_add:"➕ زێدەکرنا دەنگی",dua_none:"چ دەنگ نەهاتینە زێدەکرن.",dua_note:"فایلێن تیلاوەتا دوعایێ زێدە بکە و دەنگەکێ هەلبژێرە.",delete:"ژێبرن",
   test:"ئەزمونا دەنگێ بانگێ",reset:"زڤڕین بۆ بنەڕەتی",choose_city:"باژێری هەلبژێرە",gps:"📍 دیارکرنا خۆبەخۆ ب جهـ",
@@ -309,7 +316,7 @@ const L={
  en:{dir:"ltr",name:"English",settings:"Settings",language:"Language",theme:"Theme",theme_auto:"Auto",theme_light:"Light",theme_dark:"Dark",
   notif:"Notifications",notif_on:"On",notif_off:"Off",pre:"Pre-adhan alert",pre_desc:"Remind this many minutes before",min:"m",
   flipstop:"Flip to stop adhan",flipstop_desc:"Turn the phone face-down to stop the adhan",
-  defsound:"Default adhan sound",choosefile:"Choose file",builtin:"Built-in tone",samedefault:"Same as default",
+  defsound:"Default adhan sound",choosefile:"Choose file",builtin:"Built-in tone",samedefault:"Same as default",adhan_n:"Adhan {n}",
   perprayer:"Adhan per prayer",customsound:"Custom sound",fineadj:"Fine adjust (± minutes)",fineadj_desc:"Correct any small difference from your mosque.",
   dua:"Dua after adhan",dua_desc:"Play the post-adhan dua when it ends",dua_add:"➕ Add voice",dua_none:"No voices added.",dua_note:"Add dua recitation files from your device and pick one.",delete:"Delete",
   test:"Test adhan sound",reset:"Reset to defaults",choose_city:"Choose city",gps:"📍 Auto-detect by location",
@@ -323,7 +330,7 @@ const L={
  tr:{dir:"ltr",name:"Türkçe",settings:"Ayarlar",language:"Dil",theme:"Tema",theme_auto:"Otomatik",theme_light:"Açık",theme_dark:"Koyu",
   notif:"Bildirimler",notif_on:"Açık",notif_off:"Kapalı",pre:"Ezandan önce uyarı",pre_desc:"Vakitten şu kadar dakika önce hatırlat",min:"dk",
   flipstop:"Ters çevirince ezan dursun",flipstop_desc:"Telefonu yüzüstü çevir, ezan dursun",
-  defsound:"Varsayılan ezan sesi",choosefile:"Dosya seç",builtin:"Yerleşik ton",samedefault:"Varsayılanla aynı",
+  defsound:"Varsayılan ezan sesi",choosefile:"Dosya seç",builtin:"Yerleşik ton",samedefault:"Varsayılanla aynı",adhan_n:"Ezan {n}",
   perprayer:"Her vakit için ezan",customsound:"Özel ses",fineadj:"İnce ayar (± dakika)",fineadj_desc:"Camine göre küçük farkı düzelt.",
   dua:"Ezan sonrası dua",dua_desc:"Ezan bitince duayı çal",dua_add:"➕ Ses ekle",dua_none:"Ses eklenmedi.",dua_note:"Cihazından dua tilavet dosyaları ekle ve birini seç.",delete:"Sil",
   test:"Ezan sesini dene",reset:"Varsayılana sıfırla",choose_city:"Şehir seç",gps:"📍 Konumla otomatik seç",
@@ -364,7 +371,9 @@ const BGLABELS={
  tr:{t:"Arka plan",dawn:"Şafak",geo:"Desen",mosque:"Cami",stars:"Yıldız",plain:"Düz",custom:"🖼️ Özel görsel"}
 };
 function bgl(k){return (BGLABELS[S.lang]||BGLABELS.ar)[k]||BGLABELS.ar[k];}
-const DEF={city:"duhok",lang:"ar",theme:"auto",bg:"dawn",pre:10,flipStop:false,showScreen:true,speakPre:false,duaOn:false,duaActive:null,duaVoices:[],
+const BUILTIN=Array.from({length:17},(_,i)=>({id:i+1,url:"sounds/adhan-"+String(i+1).padStart(2,"0")+".mp3"}));
+function builtinUrl(id){const b=BUILTIN.find(x=>x.id===id);return b?b.url:null;}
+const DEF={city:"duhok",lang:"ar",theme:"auto",bg:"dawn",pre:10,flipStop:false,showScreen:true,speakPre:false,duaOn:false,duaActive:null,duaVoices:[],defBuiltin:1,
   adhanOn:{fajr:true,dhuhr:true,asr:true,maghrib:true,isha:true},
   offsets:{fajr:0,sunrise:0,dhuhr:0,asr:0,maghrib:0,isha:0}};
 let S=JSON.parse(JSON.stringify(DEF));
@@ -385,12 +394,19 @@ let ac=null;
 function tone(){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();const now=ac.currentTime;const notes=[0,2,3,5,3,2,0];let tt=now;notes.forEach(semi=>{const o=ac.createOscillator(),g=ac.createGain();o.type="sine";o.frequency.value=330*Math.pow(2,semi/12);g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(.28,tt+.05);g.gain.linearRampToValueAtTime(0,tt+.55);o.connect(g).connect(ac.destination);o.start(tt);o.stop(tt+.6);tt+=.5;});}catch(e){}}
 let curAudio=null;
 async function playBlob(key){let blob=memSnd[key]||await getSnd(key);if(blob){try{stopAudio();curAudio=new Audio(URL.createObjectURL(blob));await curAudio.play();return curAudio;}catch(e){}}return null;}
-async function playAdhan(key,isAdhan){stopAudio();let blob=memSnd[key]||await getSnd(key);if(!blob)blob=memSnd["_default"]||await getSnd("_default");if(blob){try{curAudio=new Audio(URL.createObjectURL(blob));if(isAdhan)curAudio.onended=()=>{if(S.duaOn&&S.duaActive)playBlob(S.duaActive);};await curAudio.play();return;}catch(e){}}tone();if(isAdhan&&S.duaOn&&S.duaActive)setTimeout(()=>playBlob(S.duaActive),4000);}
+const PRAYER_KEYS=["fajr","dhuhr","asr","maghrib","isha"];
+async function resolveAdhanSrc(key){
+  if(PRAYER_KEYS.indexOf(key)>=0){const pb=memSnd[key]||await getSnd(key);if(pb)return URL.createObjectURL(pb);}
+  if(S.defBuiltin>0){const u=builtinUrl(S.defBuiltin);if(u)return u;}
+  const d=memSnd["_default"]||await getSnd("_default");if(d)return URL.createObjectURL(d);
+  return null;
+}
+async function playAdhan(key,isAdhan){stopAudio();const src=await resolveAdhanSrc(key);if(src){try{curAudio=new Audio(src);if(isAdhan)curAudio.onended=()=>{if(S.duaOn&&S.duaActive)playBlob(S.duaActive);};await curAudio.play();return;}catch(e){}}tone();if(isAdhan&&S.duaOn&&S.duaActive)setTimeout(()=>playBlob(S.duaActive),4000);}
 function stopAudio(){if(curAudio){try{curAudio.onended=null;curAudio.pause();}catch(e){}curAudio=null;}}
 
 let toastT=null;
 function toast(msg){const el=document.getElementById("toast");if(!el)return;el.textContent=msg;el.style.opacity="1";clearTimeout(toastT);toastT=setTimeout(()=>el.style.opacity="0",2400);}
-async function onFile(target,file){if(!file)return;memSnd[target]=file;await openDB();await putSnd(target,file);sndNames[target]=file.name;saveSndNames();toast(t("chosen",{n:file.name}));if($("#sheetSet").classList.contains("show"))buildSettings();}
+async function onFile(target,file){if(!file)return;memSnd[target]=file;await openDB();await putSnd(target,file);sndNames[target]=file.name;saveSndNames();if(target==="_default"){S.defBuiltin=0;save();}toast(t("chosen",{n:file.name}));if($("#sheetSet").classList.contains("show"))buildSettings();}
 async function addDua(file){if(!file)return;const k="_dua"+Date.now();memSnd[k]=file;await openDB();await putSnd(k,file);S.duaVoices.push({k:k,name:file.name});if(!S.duaActive)S.duaActive=k;if(!S.duaOn)S.duaOn=true;save();toast(t("chosen",{n:file.name}));buildSettings();}
 
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
@@ -480,7 +496,13 @@ function buildSettings(){
   $("#prePlus").onclick=()=>{S.pre=Math.min(60,S.pre+1);$("#preVal").textContent=S.pre+" "+t("min");save();};
   $("#flipSwitch").classList.toggle("on",S.flipStop);
   $("#flipSwitch").onclick=()=>{S.flipStop=!S.flipStop;if(S.flipStop)askMotion();$("#flipSwitch").classList.toggle("on",S.flipStop);save();};
-  $("#defSoundName").textContent=sndNames["_default"]||t("builtin");
+  const sel=$("#defBuiltinSel");
+  if(sel){sel.innerHTML="";BUILTIN.forEach(b=>{const o=document.createElement("option");o.value=b.id;o.textContent=t("adhan_n",{n:b.id});sel.appendChild(o);});
+    if(sndNames["_default"]){const o=document.createElement("option");o.value="0";o.textContent=t("customsound")+": "+sndNames["_default"];sel.appendChild(o);}
+    sel.value=String(S.defBuiltin||0);
+    sel.onchange=()=>{S.defBuiltin=parseInt(sel.value,10)||0;save();$("#defSoundName").textContent=(S.defBuiltin>0?t("adhan_n",{n:S.defBuiltin}):(sndNames["_default"]||t("builtin")));};}
+  if($("#defBuiltinPlay"))$("#defBuiltinPlay").onclick=async()=>{stopAudio();const u=(S.defBuiltin>0)?builtinUrl(S.defBuiltin):null;if(u){try{curAudio=new Audio(u);await curAudio.play();}catch(e){}}else playAdhan("_default",false);};
+  $("#defSoundName").textContent=(S.defBuiltin>0)?t("adhan_n",{n:S.defBuiltin}):(sndNames["_default"]||t("builtin"));
   $("#defSoundFile").onchange=e=>onFile("_default",e.target.files[0]);
   const pc=$("#prayerCfg");pc.innerHTML="";
   PKEYS.filter(k=>k!=="sunrise").forEach(k=>{const card=document.createElement("div");card.className="pc";
