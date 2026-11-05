@@ -526,7 +526,16 @@ function buildSettings(){
     if(sndNames["_default"]){const o=document.createElement("option");o.value="0";o.textContent=t("customsound")+": "+sndNames["_default"];sel.appendChild(o);}
     sel.value=String(S.defBuiltin||0);
     sel.onchange=()=>{S.defBuiltin=parseInt(sel.value,10)||0;save();$("#defSoundName").textContent=(S.defBuiltin>0?t("adhan_n",{n:S.defBuiltin}):(sndNames["_default"]||t("builtin")));};}
-  if($("#defBuiltinPlay"))$("#defBuiltinPlay").onclick=async()=>{stopAudio();const u=(S.defBuiltin>0)?builtinUrl(S.defBuiltin):null;if(u){try{curAudio=new Audio(u);await curAudio.play();}catch(e){}}else playAdhan("_default",false);};
+  const pvBtn=$("#defBuiltinPlay");
+  if(pvBtn){let pvBusy=false;pvBtn.textContent="▶";
+    pvBtn.onclick=async()=>{
+      if(pvBusy){stopAudio();pvBusy=false;pvBtn.textContent="▶";return;}
+      pvBusy=true;pvBtn.textContent="■";
+      const end=()=>{pvBusy=false;pvBtn.textContent="▶";};
+      const u=(S.defBuiltin>0)?builtinUrl(S.defBuiltin):null;
+      if(u){stopAudio();try{curAudio=new Audio(u);curAudio.addEventListener("ended",end);await curAudio.play();}catch(e){end();}}
+      else{await playAdhan("_default",false);if(curAudio)curAudio.addEventListener("ended",end);else end();}
+    };}
   $("#defSoundName").textContent=(S.defBuiltin>0)?t("adhan_n",{n:S.defBuiltin}):(sndNames["_default"]||t("builtin"));
   $("#defSoundFile").onchange=e=>onFile("_default",e.target.files[0]);
   const pc=$("#prayerCfg");pc.innerHTML="";
